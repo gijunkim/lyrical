@@ -33,7 +33,7 @@
     margin: .25em 0;
     padding: 0 1em;
     text-align: center;
-    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 
 .nav-links {

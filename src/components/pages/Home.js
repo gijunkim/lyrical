@@ -1,11 +1,14 @@
 import React from 'react';
 import NavBar from '../NavBar/NavBar'
+import Logo from '../Logo/Logo'
+import SearchBar from '../SearchBar/SearchBar';
 
 function Home() {
   return (
     <div className='hero-container'>
         <NavBar/>
-        <h1>Lyrical</h1>
+        <Logo/>
+        <SearchBar/>
     </div>
   );
 }
