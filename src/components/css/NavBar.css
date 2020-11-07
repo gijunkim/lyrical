@@ -1,0 +1,49 @@
+.NavBarItems {
+    background: black;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.nav-menu {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-gap: 10px;
+    list-style: none;
+    text-align: center;
+    width: 50vw;
+    position: relative;
+    margin: 1em;
+    overflow: hidden;
+}
+
+.nav-menu ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: -1px;
+}
+
+.nav-menu li {
+    flex-grow: 1;
+    flex-basis: auto;
+    margin: .25em 0;
+    padding: 0 1em;
+    text-align: center;
+    border-left: 1px solid #ccc;
+}
+
+.nav-links {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.nav-links:hover {
+    background-color: #444;
+    border-radius: 4px;
+    transition: all 0.2s ease-out;
+}

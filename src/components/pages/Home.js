@@ -1,10 +1,11 @@
 import React from 'react';
+import NavBar from '../NavBar/NavBar'
 
 function Home() {
   return (
     <div className='hero-container'>
-        <h1>LYRICAL</h1>
-      <p>국내</p>
+        <NavBar/>
+        <h1>Lyrical</h1>
     </div>
   );
 }

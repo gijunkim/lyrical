@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './components/pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Fragment } from 'react';
+import './App.css'
 
 
 function App() {
