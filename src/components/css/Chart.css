@@ -1,0 +1,19 @@
+.chartHeader {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    padding: 75px;
+    flex-direction: column;
+}
+
+.charTitle{
+    color: black;
+}
+
+.chartTime {
+    font-size: 1.1rem;
+    color: grey;
+    padding-top: 5px;
+}

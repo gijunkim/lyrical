@@ -47,3 +47,12 @@
     border-radius: 4px;
     transition: all 0.2s ease-out;
 }
+
+.fa-facebook, .fa-twitter, .fa-youtube {
+    margin: 0px 7px 0px;
+    color: white;
+}
+
+.socialIcons {
+    margin-top: 5px;
+}
