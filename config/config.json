@@ -1,19 +1,10 @@
 {
   "development": {
-<<<<<<< HEAD
-    "username": "sql12375308",
-    "password": "6bXT9zbKKb",
-    "database": "sql12375308",
-    "host": "sql12.freemysqlhosting.net",
-    "dialect": "mysql",
-    "port": 3306
-=======
     "username": "root",
-    "password": null,
-    "database": "database_development",
+    "password": "wndud123q",
+    "database": "lyrical_dev",
     "host": "127.0.0.1",
     "dialect": "mysql"
->>>>>>> 2930c5de704f01efe761bb3267436f7d45bf0b15
   },
   "test": {
     "username": "root",
