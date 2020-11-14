@@ -1,11 +1,17 @@
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .chartHeader {
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
-    padding: 75px;
-    flex-direction: column;
+    padding-top: 50px;
+    flex-direction: column;    
 }
 
 .charTitle{

@@ -26,15 +26,24 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
-  },    
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      buffer: require.resolve("buffer/"),
+      stream: require.resolve("stream-browserify")
+    }
+  },  
+
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
   devServer: {
     contentBase: './dist',
