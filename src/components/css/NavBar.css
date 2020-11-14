@@ -39,12 +39,13 @@
 .nav-links {
     color: white;
     text-decoration: none;
+    font-weight: bold;
     padding: 0.5rem 1rem;
 }
 
 .nav-links:hover {
     background-color: #444;
-    border-radius: 4px;
+    border-radius: 5px;
     transition: all 0.2s ease-out;
 }
 

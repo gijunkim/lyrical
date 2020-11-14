@@ -1,0 +1,52 @@
+.aboutContainer {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.aboutTextContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.aboutText{
+    color: white;
+    font-size: 2.5rem;
+    padding: 5px;
+}
+
+.aboutTextSub{
+    color: white;
+    font-size: 1rem;
+    padding: 5px;
+}
+
+.miscTextContainer {
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.miscText {
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
+.termsText {
+    color: #AAAAAA;
+    font-size: 0.8rem;
+    align-self: center;
+}
+
+.iconsContainer {
+    font-size: 1.5em;
+    padding: 10px;
+}
