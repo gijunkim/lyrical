@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>회원가입 페이지~</h1>
+<form action="/auth/join" method="POST" >
+    <div class="container">
+        <label for="nickname">닉네임 : </label>
+        <input name="nickname" type="text" required />
+        <input type="button" name="nick-check" value="중복체크">
+    </div> 
+    <div class="container">
+        <label for="name">이름 : </label>
+        <input name="name" type="text" required />
+    </div>
+    <div class="container">
+        <label for="email">이메일 : </label>
+        <input name="email" type="email" required />
+        <input type="button" name="email-check" value="중복체크">
+    </div>
+    <div class="container">
+        <label for="password">패스워드 : </label>
+        <input name="password" type="password" required />
+        
+    </div>
+    <div class="container"> 
+        <input type="submit" value="제출">
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    window.onload = () => {
+        const nickCheckButton = document.querySelector('input[name="nick-check"]');
+        nickCheckButton.onclick = async (e) => {
+            const nickname = document.querySelector('input[name="nickname"]').value;
+            if(nickname){
+                const response = await axios.post('/user/exist', { nickname: nickname});
+                console.log(response);
+            }
+        };
+    };
+</script>
+{% endblock %}
