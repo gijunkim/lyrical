@@ -26,7 +26,13 @@ class NavBar extends Component {
                         <i className="fab fa-youtube"></i>
                     </div>
                 </ul>
+                <div className="signInUpButtons">
+                    <a className="signUpButton">회원가입</a>
+                    <a className="signInButton">로그인</a>
+                </div>
+                
             </nav>
+                
         )
     }
 }
