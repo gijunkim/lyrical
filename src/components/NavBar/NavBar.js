@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { MenuItems } from "./MenuItems";
+
+import LogIn from "../pages/LogIn"
+
 import '../css/NavBar.css';
+import { Link } from 'react-router-dom';
 
 class NavBar extends Component {
     render() {
@@ -27,8 +31,8 @@ class NavBar extends Component {
                     </div>
                 </ul>
                 <div className="signInUpButtons">
-                    <a className="signUpButton">회원가입</a>
-                    <a className="signInButton">로그인</a>
+                    <Link to="/login" className="signUpButton">회원가입</Link>
+                    <Link to="/login" className="signInButton">로그인</Link>
                 </div>
                 
             </nav>

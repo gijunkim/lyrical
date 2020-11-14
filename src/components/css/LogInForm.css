@@ -1,0 +1,24 @@
+.FormContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.FormHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    flex-direction: column;    
+}
+
+.FormTitle{
+    color: black;
+}
+
+.Form {
+    align-self: center;
+    padding: 30px;
+}
