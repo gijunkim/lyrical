@@ -11,6 +11,7 @@ dotenv.config();
 
 const pageRouter = require('./routes/page');
 const userRouter = require('./routes/user');
+const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 //const passportConfig = require('./passport');
 
@@ -23,7 +24,7 @@ nunjucks.configure('views', {
     watch: true,
 });
 // TODO: change force to false
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
 .then(() => {
     console.log("데이터베이스 연결 성공");
 })
@@ -49,6 +50,7 @@ app.use(session({
 //app.use(passport.initilize());
 //app.use(passport.session());
 
+app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/', pageRouter);
 
