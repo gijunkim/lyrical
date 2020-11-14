@@ -9,11 +9,32 @@ const Styles = styled.div`
   table {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+    border-spacing: 0 2px;
+
     margin: 0 auto;
     tr {
         :last-child {
             padding-bottom: 0.5rem;
         }
+        transition: all .2s ease-in-out;
+        border-bottom: 1px;
+        td {
+            :first-child {
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
+            :last-child {
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px
+            }
+            cursor: pointer;
+        }
+    }
+
+    tr:hover {
+        transform: scale(1.1);
+        background-color: #DDDDDD;
+        
     }
 
     td {
