@@ -42,6 +42,15 @@ router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', {
     return res.redirect('/');
 });
 
+// 구글 로그인
+router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'] }));
+
+router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {
+    failureRedirect: '/',
+}), (req, res) => {
+    return res.redirect('/');
+});
+
 /** 로그 아웃 **/
 router.get('/logout', isLoggedIn, (req, res, next) => {
     req.logout();
