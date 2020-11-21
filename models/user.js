@@ -26,13 +26,12 @@ module.exports = class User extends Sequelize.Model{
             //인증 코드
             emailVerifyKey: {
                 type: Sequelize.STRING(140),
-                allowNull: false,
-                unique: true,
+                allowNull: true,
             },
             //인증 코드
             keyExpire: {
                 type: Sequelize.STRING(140),
-                allowNull: false,
+                allowNull: true,
             },
             password: {
                 type: Sequelize.STRING(255),

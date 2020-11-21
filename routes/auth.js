@@ -12,6 +12,8 @@ const router = express.Router();
 
 
 /** 로그인 **/
+
+// 로컬 로그인
 router.post('/login', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local', (authError, user, message) => {
         if(authError){
@@ -29,6 +31,15 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
             return res.redirect('/');
         });
     })(req, res, next);
+});
+
+// 카카오 로그인
+router.get('/kakao', isNotLoggedIn, passport.authenticate('kakao'));
+
+router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', {
+    failureRedirect: '/',
+}), (req, res) => {
+    return res.redirect('/');
 });
 
 /** 로그 아웃 **/
