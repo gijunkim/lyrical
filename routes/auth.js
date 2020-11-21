@@ -6,9 +6,39 @@ const nodemailer = require('nodemailer');
 
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const { node } = require('webpack');
+const passport = require('passport');
+const { runInNewContext } = require('vm');
 const router = express.Router();
 
-// 회원가입
+
+/** 로그인 **/
+router.post('/login', isNotLoggedIn, (req, res, next) => {
+    passport.authenticate('local', (authError, user, message) => {
+        if(authError){
+            console.log(authError);
+            return next(authError);
+        }
+        if(!user){
+            return res.redirect(`/?loginError=${message.message}`);
+        }
+        return req.login(user, (loginError) => {
+            if(loginError){
+                console.error(loginError);
+                return next(loginError);
+            }
+            return res.redirect('/');
+        });
+    })(req, res, next);
+});
+
+/** 로그 아웃 **/
+router.get('/logout', isLoggedIn, (req, res, next) => {
+    req.logout();
+    req.session.destroy();
+    return res.redirect('/?logout');
+});
+
+/** 회원가입 **/
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
     const { nickname, name, email, password } = req.body;
 
@@ -52,7 +82,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 });
 
 
-// verification
+/** verification **/
 // 이메일 인증 키 재전송
 router.post('/verification/resend-email-key', isNotLoggedIn, async (req, res, next) => {
     const { id } = req.body;
@@ -90,16 +120,12 @@ router.post('/verification/resend-email-key', isNotLoggedIn, async (req, res, ne
 router.get('/verification/verify-account/:id/:emailKey', isNotLoggedIn, async (req, res, next) => {
     const { id, emailKey } = req.params;
 
-    console.log(id, emailKey);
-
     try {
         const exUser = await User.findOne({where: {id}});
         if(!exUser){
             // TODO: 라우터 추가
             return res.redirect('/auth/verification/verify-account?error=notExist');
         } else{
-            console.log(exUser.emailVerifyKey, exUser.keyExpire);
-            console.log(emailKey, Date.now());
 
             if(exUser.emailVerifyKey == emailKey && exUser.keyExpire > Date.now()){
                 await User.update({ emailVerification : true},{where: {id}});
@@ -110,7 +136,6 @@ router.get('/verification/verify-account/:id/:emailKey', isNotLoggedIn, async (r
                 return res.redirect('/auth/verification/verify-account?error=keyFalse');
             }
             
-            return res.redirect('/');
         }
     } catch(err) {
         console.error(err);
@@ -124,25 +149,25 @@ router.get('/verification/verify-account/:id/:emailKey', isNotLoggedIn, async (r
 async function sendMail(req, res, next) {
 
     const transporter = nodemailer.createTransport({
-        service: "Gmail",
+        service: "gmail",
         auth: {
             user: process.env.GMAIL_USER,
             pass: process.env.GMAIL_PASSWORD
         }
     });
 
-    const url = `http://${req.hostname}/confirmEmail?key=${req.key}`;
+
+    const mailOptions = {
+        from: process.env.GMAIL_USER,    
+        to: req.email,                     
+        subject: 'Lyrical 인증 메일', 
+        text: 'Lyrical 인증 메일 테스트' 
+    };
 
     try{
-        const info = await transporter.sendMail({
-            from: "Lyrical <jooyoung@lyrical.com>",
-            to: req.email,
-            subject: "Lyrical 인증 메일",
-            text: "Lyrical 계정 인증 메일 입니다. 계정을 인증 하시려면 아래 링크를 눌러주세요.",
-            html: `<b>${url}</b>`
-        });
+        const info = await transporter.sendMail(mailOptions);
     } catch(err){
-        console.error(err);
+        console.log(err);   
     }
 }
 
