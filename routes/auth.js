@@ -8,6 +8,7 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const { node } = require('webpack');
 const router = express.Router();
 
+// 회원가입
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
     const { nickname, name, email, password } = req.body;
 
@@ -24,7 +25,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
         const hash = await bcrypt.hash(password, 12);
         // 이메일 인증키 생성
-        const emailVerifyKey = await crypto.randomBytes(100).toString('base64');
+        const emailVerifyKey = await crypto.randomBytes(100).toString('hex').substr(0,100);
         // 인증키 만료 날짜 10분
         const keyExpire = Date.now() + 600000
         const user = await User.create({
@@ -49,6 +50,74 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
         next(err);
     }
 });
+
+
+// verification
+// 이메일 인증 키 재전송
+router.post('/verification/resend-email-key', isNotLoggedIn, async (req, res, next) => {
+    const { id } = req.body;
+
+    try {
+        const exUser = await User.findOne({where: {id}});
+        if(!exUser){
+            return res.redirect('/?error=notExist');
+        } else{
+            // 이메일 인증키 생성
+            const emailVerifyKey = await crypto.randomBytes(100).toString('hex');
+            // 인증키 만료 날짜 10분
+            const keyExpire = Date.now() + 600000
+            const user = await User.update({
+                emailVerifyKey,
+                keyExpire
+            }, {where: {id}});
+
+            req.userId = user.id;
+            req.key = emailVerifyKey;
+            req.email = email;
+
+            //sendMail(req, res, next);
+
+            return res.redirect('/');
+        }
+    } catch(err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+// verification
+// 이메일 인증 확인
+router.get('/verification/verify-account/:id/:emailKey', isNotLoggedIn, async (req, res, next) => {
+    const { id, emailKey } = req.params;
+
+    console.log(id, emailKey);
+
+    try {
+        const exUser = await User.findOne({where: {id}});
+        if(!exUser){
+            // TODO: 라우터 추가
+            return res.redirect('/auth/verification/verify-account?error=notExist');
+        } else{
+            console.log(exUser.emailVerifyKey, exUser.keyExpire);
+            console.log(emailKey, Date.now());
+
+            if(exUser.emailVerifyKey == emailKey && exUser.keyExpire > Date.now()){
+                await User.update({ emailVerification : true},{where: {id}});
+                // TODO: 라우터 추가
+                return res.redirect('/auth/verification/verify-account?error=success');
+            } else{
+                // TODO: 라우터 추가
+                return res.redirect('/auth/verification/verify-account?error=keyFalse');
+            }
+            
+            return res.redirect('/');
+        }
+    } catch(err) {
+        console.error(err);
+        next(err);
+    }
+});
+
 
 // 이메일 인증을 위한 메일 보내기
 // TODO : fix
