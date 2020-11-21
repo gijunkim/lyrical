@@ -29,6 +29,11 @@ module.exports = class User extends Sequelize.Model{
                 allowNull: false,
                 unique: true,
             },
+            //인증 코드
+            keyExpire: {
+                type: Sequelize.STRING(140),
+                allowNull: false,
+            },
             password: {
                 type: Sequelize.STRING(255),
                 allowNull: true,

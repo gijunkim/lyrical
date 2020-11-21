@@ -25,18 +25,22 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
         const hash = await bcrypt.hash(password, 12);
         // 이메일 인증키 생성
         const emailVerifyKey = await crypto.randomBytes(100).toString('base64');
-        await User.create({
+        // 인증키 만료 날짜 10분
+        const keyExpire = Date.now() + 600000
+        const user = await User.create({
             nickname,
             name,
             email,
             password: hash,
-            emailVerifyKey
+            emailVerifyKey,
+            keyExpire
         });
 
+        req.userId = user.id;
         req.key = emailVerifyKey;
         req.email = email;
 
-        sendMail(req, res, next);
+        //sendMail(req, res, next);
 
         return res.redirect('/');
 

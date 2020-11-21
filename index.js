@@ -32,6 +32,7 @@ sequelize.sync({ force: true })
     console.log(err);
 });
 
+
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
