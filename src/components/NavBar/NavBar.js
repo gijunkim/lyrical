@@ -31,7 +31,7 @@ class NavBar extends Component {
                     </div>
                 </ul>
                 <div className="signInUpButtons">
-                    <Link to="/login" className="signUpButton">회원가입</Link>
+                    <Link to="/signup" className="signUpButton">회원가입</Link>
                     <Link to="/login" className="signInButton">로그인</Link>
                 </div>
                 
