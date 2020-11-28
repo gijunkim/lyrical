@@ -39,6 +39,15 @@
                 console.log(response);
             }
         };
+
+        const emailCheckButton = document.querySelector('input[name="email-check"]');
+        emailCheckButton.onclick = async (e) => {
+            const email = document.querySelector('input[name="email"]').value;
+            if(email){
+                const response = await axios.post('/user/exist', { email: email});
+                console.log(response);
+            }
+        };
     };
 </script>
 {% endblock %}

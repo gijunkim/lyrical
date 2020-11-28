@@ -21,14 +21,17 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
             return next(authError);
         }
         if(!user){
-            return res.redirect(`/?loginError=${message.message}`);
+            error.status = 396;
+            error.code = 'login error';
+            error.message = message.message;
+            return next(error);
         }
         return req.login(user, (loginError) => {
             if(loginError){
                 console.error(loginError);
                 return next(loginError);
             }
-            return res.redirect('/');
+            return res.json({res});
         });
     })(req, res, next);
 });
@@ -66,11 +69,17 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
     try {
         const exUser = await User.findOne({where: {nickname}});
         if(exUser){
-            return res.redirect('/join?error=exist');
+            const error = new Error();
+            error.status = 396;
+            error.code = 'nickname already taken';
+            return next(error);
         }
         const exUser2 = await User.findOne({where: {email}});
         if(exUser2){
-            return res.redirect('/join?error=exist');
+            const error = new Error();
+            error.status = 396;
+            error.code = 'email already taken';
+            return next(error);
         }
 
         const hash = await bcrypt.hash(password, 12);

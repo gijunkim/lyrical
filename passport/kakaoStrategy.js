@@ -1,5 +1,6 @@
 const passport = require('passport');
 const KakaoStrategy = require('passport-kakao').Strategy;
+const {v4: uuidv4} = require('uuid');
 
 const User = require('../models/user');
 
@@ -17,10 +18,12 @@ module.exports = () => {
             } else {
                 // emailVerification 전략 수정
                 // kakao면 생성?
+                const nickname = uuidv4().substr(0,10);
+
                 const newUser = await User.create({
                     email: profile._json && profile._json.kakao_account.email,
                     emailVerification: true,
-                    nickname: profile.displayName,
+                    nickname,
                     name: profile.username,
                     snsID: profile.id,
                     provider: 'kakao'

@@ -19,13 +19,12 @@ const cors = require('cors');
 const app = express();
 passportConfig(); // 패스포트 설정
 app.set('port', process.env.PORT || 8081);
-/*
 app.set('view engine', 'html');
 nunjucks.configure('views', {
     express: app,
     watch: true,
 });
-*/
+
 // TODO: change force to false
 sequelize.sync({ force: false })
 .then(() => {
@@ -67,8 +66,7 @@ app.use((req, res, next) => {
 
 // 에러 router
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send({'error': '에러 router'});
+    res.send({'error': err});
 });
 
 app.listen(app.get('port'), () => {

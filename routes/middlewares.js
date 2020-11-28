@@ -2,8 +2,10 @@ exports.isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         next();
     } else{
-        const message = encodeURIComponent('로그인이 필요한 서비스 입니다.');
-        res.redirect(`/login?message=${message}`);
+        const error = new Error();
+        error.status = 398;
+        error.code = 'not LoggedIn';
+        return next(error);
     }
 }
 
@@ -11,7 +13,9 @@ exports.isNotLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()){
         next();
     } else{
-        const message = encodeURIComponent('로그인한 상태 입니다.');
-        res.redirect(`/?error=${message}`);
+        const error = new Error();
+        error.status = 397;
+        error.code = 'Already LoggedIn';
+        return next(error);
     }
 }

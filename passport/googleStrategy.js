@@ -1,5 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const {v4: uuidv4} = require('uuid');
 
 const User = require('../models/user');
 
@@ -19,10 +20,12 @@ module.exports = () => {
             } else {
                 // emailVerification 전략 수정
                 // google, nickname 에러
+                const nickname = uuidv4().substr(0,10);
+
                 const newUser = await User.create({
                     email: profile._json && profile._json.email,
                     emailVerification:  profile._json && profile._json.email_verified,
-                    nickname: profile.displayName,
+                    nickname,
                     name: profile._json.name,
                     snsID: profile.id,
                     provider: 'google'
