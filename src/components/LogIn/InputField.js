@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import '../css/LogInForm.css';
+import '../css/LogInForm.css';
 
 
 class InputField extends Component {
@@ -8,7 +8,7 @@ class InputField extends Component {
         return(
             <div className="inputField">
                 <input 
-                    className="input"
+                    className="Input"
                     type={this.props.type}
                     placeholder={this.props.placeholder}
                     value={this.props.value}

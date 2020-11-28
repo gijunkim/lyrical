@@ -4,6 +4,9 @@
     "react"
   ],
   "plugins": [
-    "babel-plugin-transform-object-rest-spread"
+    "babel-plugin-transform-object-rest-spread",
+    ["transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }
