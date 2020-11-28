@@ -2,5 +2,11 @@
   "presets": [
     "env",
     "react"
+  ],
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread",
+    ["transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }

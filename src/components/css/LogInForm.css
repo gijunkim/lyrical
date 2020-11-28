@@ -1,0 +1,60 @@
+.FormContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.FormHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    flex-direction: column;    
+}
+
+.FormTitle{
+    color: black;
+}
+
+.Form {
+    align-self: center;
+    padding: 30px;
+    width: 20%;
+}
+
+.InputHeader {
+    font-size: 1rem;
+    padding: 5px;
+}
+
+.Input {
+    box-sizing: border-box;
+    outline: none;
+    border: solid 2px #777;
+    border-radius: 4px;
+    color: #292929;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255,255,255,1);
+    margin-bottom: 16px;
+}
+
+.loginButton {
+    padding-top: 16px;
+}
+   
+   
+.btn {
+    width: 100%;
+    color:  white;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid 2px #777;
+    border-radius: 4px;
+    background: black;
+    cursor: pointer;
+}

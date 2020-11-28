@@ -1,0 +1,89 @@
+
+
+.NavBarItems {
+    background: black;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.nav-menu {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-gap: 10px;
+    list-style: none;
+    text-align: center;
+    width: 50vw;
+    position: relative;
+    margin: 1em;
+    overflow: hidden;
+}
+
+.nav-menu ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: -1px;
+}
+
+.nav-menu li {
+    flex-grow: 1;
+    flex-basis: auto;
+    margin: .25em 0;
+    padding: 0 1em;
+    text-align: center;
+    border-right: 1px solid #ccc;
+}
+
+.nav-links {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+}
+
+.nav-links:hover {
+    background-color: #444;
+    border-radius: 5px;
+    transition: all 0.2s ease-out;
+}
+
+.fa-facebook, .fa-twitter, .fa-youtube {
+    margin: 0px 7px 0px;
+    color: white;
+}
+
+.socialIcons {
+    margin-top: 5px;
+}
+
+.signInUpButtons{
+    position: absolute;
+    right: 10px;
+}
+
+.signUpButton, .signInButton {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.signUpButton {
+    border-right: 1px solid #ccc;
+    margin: .25em 0;
+}
+
+.signInButton {
+    margin: .25em 0;
+
+}
+
+.signUpButton:hover, .signInButton:hover {
+    background-color: #444;
+    border-radius: 5px;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+}

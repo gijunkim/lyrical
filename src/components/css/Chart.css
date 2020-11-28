@@ -1,0 +1,26 @@
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.chartHeader {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    flex-direction: column;    
+}
+
+.charTitle{
+    color: black;
+}
+
+.chartTime {
+    font-size: 1.1rem;
+    color: grey;
+    padding-top: 5px;
+}

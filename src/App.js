@@ -1,7 +1,9 @@
 import React from 'react';
 import Home from './components/pages/Home';
+import LogIn from './components/pages/LogIn';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Fragment } from 'react';
+import './App.css'
 
 
 function App() {
@@ -9,7 +11,8 @@ function App() {
     <Fragment>
       <Router>
         <Switch>
-          <Route path='/' exact component={Home} />
+          <Route exact path="/" component={Home}/>
+          <Route path="/login" component={LogIn} />
         </Switch>
       </Router>
     </Fragment>
