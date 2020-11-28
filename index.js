@@ -14,17 +14,20 @@ const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
+const cors = require('cors');
 
 const app = express();
 passportConfig(); // 패스포트 설정
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 8081);
+/*
 app.set('view engine', 'html');
 nunjucks.configure('views', {
     express: app,
     watch: true,
 });
+*/
 // TODO: change force to false
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 .then(() => {
     console.log("데이터베이스 연결 성공");
 })
@@ -51,6 +54,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(cors());
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/', pageRouter);
@@ -63,10 +67,8 @@ app.use((req, res, next) => {
 
 // 에러 router
 app.use((err, req, res, next) => {
-    res.locals.message = err.message;
-    res.locals.error = err;
     res.status(err.status || 500);
-    res.render('error');
+    res.send({'error': '에러 router'});
 });
 
 app.listen(app.get('port'), () => {

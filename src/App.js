@@ -6,17 +6,35 @@ import { Fragment } from 'react';
 import './App.css'
 
 
-function App() {
-  return (
-    <Fragment>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route path="/login" component={LogIn} />
-        </Switch>
-      </Router>
-    </Fragment>
-  );
+class App extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+        username:null
+    };
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:8081/')
+        .then(res=>res.json())
+        .then(data=>this.setState({username:data.username}));
+  }
+
+  render() { 
+    const {username} = this.state;
+    console.log(username);
+    return (
+      <Fragment>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/login" component={LogIn} />
+          </Switch>
+        </Router>
+      </Fragment>
+    );
+  }
 }
 
 export default App;
