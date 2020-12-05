@@ -79,6 +79,7 @@ class LogInForm extends Component {
                         type="text"
                         placeholder="E-mail"
                         value={this.state.email ? this.state.email : ''}
+                        error={false}
                         onChange={ (val) => this.setInputValue("email", val) }
                     />
                     <h1 className="InputHeader">Lyrical Password</h1>
@@ -86,6 +87,7 @@ class LogInForm extends Component {
                         type="password"
                         placeholder="Password"
                         value={this.state.password ? this.state.password : ''}
+                        error={false}
                         onChange={ (val) => this.setInputValue("password", val) }
                     />
                     <LogInButton 

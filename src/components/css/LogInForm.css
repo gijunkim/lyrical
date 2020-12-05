@@ -31,6 +31,18 @@
     width: 20%;
 }
 
+.InputHeaderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.InputHeaderError {
+    font-size: 0.8rem;
+    color: red;
+    padding: 5px;
+}
+
 .InputHeader {
     font-size: 1rem;
     padding: 5px;
@@ -40,6 +52,19 @@
     box-sizing: border-box;
     outline: none;
     border: solid 2px #777;
+    border-radius: 4px;
+    color: #292929;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255,255,255,1);
+    margin-bottom: 16px;
+}
+
+.InputError {
+    box-sizing: border-box;
+    outline: none;
+    border: solid 2px rgb(255, 0, 0);
     border-radius: 4px;
     color: #292929;
     width: 100%;
