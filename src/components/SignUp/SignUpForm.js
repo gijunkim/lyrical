@@ -22,7 +22,10 @@ class SignUpForm extends Component {
             nicknameError: false,
             nameError: false,
 
-            liveCheck: false
+            liveCheck: false,
+
+            emailDuplicate: false,
+            nicknameDuplicate: false,
         }
     }
 
@@ -58,7 +61,8 @@ class SignUpForm extends Component {
             error = true;
         }
 
-        console.log(this.state.emailError);
+        this.checkEmailDuplicate();
+        this.checkNicknameDuplicate();
         
         if (!error) {
                 Axios.post('http://localhost:8081/auth/join', {
@@ -85,8 +89,16 @@ class SignUpForm extends Component {
         Axios.post('http://localhost:8081/user/exist', {
             email: this.state.email,
         }).then((response) => {
-            console.log(response);
-        });
+            this.setState({emailDuplicate: response.data.exist});
+            });
+    }
+
+    checkNicknameDuplicate() {
+        Axios.post('http://localhost:8081/user/exist', {
+            nickname: this.state.nickname,
+        }).then((response) => {
+            this.setState({nicknameDuplicate: response.data.exist});
+            });
     }
 
     setInputValue(property, val) {
@@ -96,12 +108,10 @@ class SignUpForm extends Component {
                 this.setState({
                     emailError: false
                 });
-                this.renderHeaderError(this.state.emailError, "이메일을");
             } else {
                 this.setState({
                     emailError: true
                 })
-                this.renderHeaderError(this.state.emailError, "이메일을");
             }
         }
 
@@ -111,12 +121,10 @@ class SignUpForm extends Component {
                 this.setState({
                     passwordError: false
                 });
-                this.renderHeaderError(this.state.passwordError, "비밀번호를");
             } else {
                 this.setState({
                     passwordError: true
                 });
-                this.renderHeaderError(this.state.passwordError, "비밀번호를");
             }
         }
         
@@ -126,12 +134,10 @@ class SignUpForm extends Component {
                 this.setState({
                     nicknameError: false
                 });
-                this.renderHeaderError(this.state.nicknameError, "닉네임을");
             } else {
                 this.setState({
                     nicknameError: true
                 });
-                this.renderHeaderError(this.state.nicknameError, "닉네임을");
             }
         }
 
@@ -141,12 +147,10 @@ class SignUpForm extends Component {
                 this.setState({
                     nameError: false
                 });
-                this.renderHeaderError(this.state.nameError, "이름을");
             } else {
                 this.setState({
                     nameError: true
                 });
-                this.renderHeaderError(this.state.nameError, "이름을");
             }
         }
 
@@ -165,6 +169,11 @@ class SignUpForm extends Component {
         }
     }
 
+    renderHeaderDuplicate(property, val) {
+        if (property)
+        return (<p className="InputHeaderError">{val}</p>);
+    }
+
     render() {   
         return(
             <div className="FormContainer">
@@ -175,6 +184,7 @@ class SignUpForm extends Component {
                     <div className="InputHeaderContainer">
                     <h1 className="InputHeader">Lyrical Email</h1>
                     {this.renderHeaderError(this.state.emailError, "이메일을")}
+                    {this.renderHeaderDuplicate(this.state.emailDuplicate, '이미 계정이 있는 이메일입니다.')}
                     </div>
                     <InputField
                         type="text"
@@ -197,6 +207,7 @@ class SignUpForm extends Component {
                     <div className="InputHeaderContainer">
                     <h1 className="InputHeader">Lyrical Nickname</h1>
                     {this.renderHeaderError(this.state.nicknameError, "닉네임을")}
+                    {this.renderHeaderDuplicate(this.state.nicknameDuplicate, '이미 사용중인 닉네임입니다.')}
                     </div>
                     <InputField
                         type="text"
