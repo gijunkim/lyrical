@@ -13,7 +13,6 @@ module.exports = class Artist extends Sequelize.Model{
             },
             verified: {
                 type: Sequelize.BOOLEAN,
-                allowNull: false,
                 defaultValue: false,
             },
             aboutArtist: {
@@ -33,6 +32,10 @@ module.exports = class Artist extends Sequelize.Model{
     }
 
     static associate(db){
-        db.Artist.belongsToMany(db.Song, {through: 'SongArtist', as: 'Songs'});
+        db.Artist.hasOne(db.Song);
+
+        db.Artist.belongsToMany(db.Song, { through: 'Feature', as: 'Featuring'});
+        db.Artist.belongsToMany(db.Song, { through: 'Producer', as: 'Producing' });
+        db.Artist.belongsToMany(db.Song, { through: 'Written', as: 'Writing'});
     }
 }

@@ -1,28 +1,18 @@
 const express = require('express');
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn, isNotLoggedIn, isEmailVerified} = require('./middlewares');
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-    res.locals.user = req.user;
-    next();
-});
-
 router.get('/login', isNotLoggedIn, (req, res, next) => {
-    const message = req.query.message || null;
-    res.render('login');
+    return res.json({ status : 'okay'});
 });
 
 router.get('/join', isNotLoggedIn, (req, res, next) => {
-    res.render('join');
+    return res.json({ status : 'okay'});
 });
 
-router.get('/profile', isLoggedIn, (req, res, next) => {
-    res.render('profile');
-});
-
-router.get('/', (req, res, next) => {
-    res.render('main');
+router.get('/profile', isLoggedIn, isEmailVerified, (req, res, next) => {
+    return res.json({ status : 'okay', user : req.user});
 });
 
 module.exports = router;

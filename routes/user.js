@@ -11,29 +11,31 @@ router.post('/exist', isNotLoggedIn, async (req, res, next) => {
         try{
             const exUser = await User.findOne({ where: { nickname }});
             // 유저가 존재 할 경우
-            if(exUser){ res.json({ exist: true }); }
-            else{ res.json({ exist: false });}
+            if(exUser){ res.json({ status : 'okay', exist: true }); }
+            else{ res.json({ status : 'okay', exist: false });}
 
         } catch(err){
             const error = new Error();
-            err.status = 399;
+            error.status = 399;
+            error.code = 'exist nickname error';
             console.error(err);
-            return next(err);
+            return next(error);
         }
     } else if(email){
         try{
             const exUser = await User.findOne({ where: { email }});
             // 유저가 존재 할 경우
-            if(exUser){ res.json({ exist: true }); }
-            else{ res.json({ exist: false });}
+            if(exUser){ res.json({ status : 'okay', exist: true }); }
+            else{ res.json({ status : 'okay', exist: false });}
         } catch(err){
             const error = new Error();
-            err.status = 399;
+            error.status = 399;
+            error.code = 'exist email error';
             console.err(err);
-            return next(err);
+            return next(error);
         }
     } else{
-        res.json({ exist: false });
+        res.json({ status : 'bad', exist: false });
     }
 });
 

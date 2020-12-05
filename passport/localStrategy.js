@@ -16,10 +16,10 @@ module.exports = () => {
                 if(result){
                     done(null, exUser);
                 } else {
-                    done(null, false, {message: '패스워드가 일치하지 않습니다.'});
+                    done(null, false);
                 }
             } else{
-                done(null, false, {message: '가입되지 않은 회원입니다.'});
+                done(null, false);
             }
         } catch(err){
             console.log(err);

@@ -10,7 +10,7 @@ module.exports = () => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: '/auth/google/callback'
     }, async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
+        //console.log(profile);
         try {
             const exUser = await User.findOne({
                 where: {snsID: profile.id, provider: 'google'},
