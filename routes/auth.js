@@ -50,8 +50,10 @@ router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao'), (re
 // 구글 로그인
 router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'] }));
 
-router.get('/google/callback', isNotLoggedIn, passport.authenticate('google'), (req, res) => {
-    return res.json({'status' : 'google login okay'});
+router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {
+    failureRedirect: 'http://localhost:8080',
+}), (req, res) => {
+    return res.redirect('http://localhost:8080');
 });
 
 /** 로그 아웃 **/

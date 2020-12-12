@@ -38,7 +38,6 @@ sequelize.sync({ force: false })
     console.log(err);
 });
 
-
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -58,6 +57,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cors());
+
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/song', songRouter);

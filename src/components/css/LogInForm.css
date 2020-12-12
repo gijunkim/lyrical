@@ -22,6 +22,25 @@
     align-self: center;
     padding: 30px;
     width: 20%;
+    border-bottom: solid 2px black;
+}
+
+.FormOthers {
+    align-self: center;
+    padding: 30px;
+    width: 20%;
+}
+
+.InputHeaderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.InputHeaderError {
+    font-size: 0.8rem;
+    color: red;
+    padding: 5px;
 }
 
 .InputHeader {
@@ -42,10 +61,32 @@
     margin-bottom: 16px;
 }
 
+.InputError {
+    box-sizing: border-box;
+    outline: none;
+    border: solid 2px rgb(255, 0, 0);
+    border-radius: 4px;
+    color: #292929;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255,255,255,1);
+    margin-bottom: 16px;
+}
+
 .loginButton {
     padding-top: 16px;
 }
-   
+
+.signButton {
+    padding-bottom: 12px;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}
    
 .btn {
     width: 100%;
@@ -57,4 +98,33 @@
     border-radius: 4px;
     background: black;
     cursor: pointer;
+}
+
+.btnG {
+    width: 100%;
+    color:  white;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid 2px #777;
+    border-radius: 4px;
+    background: #e47365;
+    cursor: pointer;
+}
+
+.btnK {
+    width: 100%;
+    color:  black;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid 2px #777;
+    border-radius: 4px;
+    background: #ffe500;
+    cursor: pointer;
+}
+
+.fa-google {
+    margin: 0px 7px 0px;
+    color: white;
 }
