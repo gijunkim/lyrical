@@ -5,9 +5,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
-const { node } = require('webpack');
 const passport = require('passport');
-const { runInNewContext } = require('vm');
 const router = express.Router();
 
 
@@ -17,18 +15,27 @@ const router = express.Router();
 router.post('/login', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local', (authError, user, message) => {
         if(authError){
+            const error = new Error();
+            error.status = 396;
+            error.code = "local login authError";
             console.log(authError);
-            return next(authError);
+            return next(error);
         }
         if(!user){
-            return res.redirect(`/?loginError=${message.message}`);
+            const error = new Error();
+            error.status = 396;
+            error.code = "이메일 또는 패스워드를 잘 못 입력했습니다.";
+            return next(error);
         }
         return req.login(user, (loginError) => {
             if(loginError){
+                const error = new Error();
+                error.status = 396;
+                error.code = "local login loginError";
                 console.error(loginError);
-                return next(loginError);
+                return next(error);
             }
-            return res.redirect('/');
+            return res.json({ 'status' : 'okay'});
         });
     })(req, res, next);
 });
@@ -36,10 +43,8 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 // 카카오 로그인
 router.get('/kakao', isNotLoggedIn, passport.authenticate('kakao'));
 
-router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', {
-    failureRedirect: '/',
-}), (req, res) => {
-    return res.redirect('/');
+router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao'), (req, res) => {
+    return res.json({'status' : 'kakao login okay'});
 });
 
 // 구글 로그인
@@ -55,7 +60,7 @@ router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {
 router.get('/logout', isLoggedIn, (req, res, next) => {
     req.logout();
     req.session.destroy();
-    return res.redirect('/?logout');
+    return res.json({ 'status' : 'okay'});
 });
 
 /** 회원가입 **/
@@ -66,11 +71,17 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
     try {
         const exUser = await User.findOne({where: {nickname}});
         if(exUser){
-            return res.redirect('/join?error=exist');
+            const error = new Error();
+            error.status = 396;
+            error.code = 'nickname already taken';
+            return next(error);
         }
         const exUser2 = await User.findOne({where: {email}});
         if(exUser2){
-            return res.redirect('/join?error=exist');
+            const error = new Error();
+            error.status = 396;
+            error.code = 'email already taken';
+            return next(error);
         }
 
         const hash = await bcrypt.hash(password, 12);
@@ -93,27 +104,33 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
         //sendMail(req, res, next);
 
-        return res.redirect('/');
+        return res.json({ status : 'okay', user});
 
     } catch(err){
+        const error = new Error();
+        error.status = 400;
+        error.code = 'sudden error';
         console.error(err);
-        next(err);
+        next(error);
     }
 });
 
 
 /** verification **/
 // 이메일 인증 키 재전송
-router.post('/verification/resend-email-key', isNotLoggedIn, async (req, res, next) => {
+router.post('/verification/resend-email-key', isLoggedIn, async (req, res, next) => {
     const { id } = req.body;
 
     try {
         const exUser = await User.findOne({where: {id}});
         if(!exUser){
-            return res.redirect('/?error=notExist');
+            const error = new Error();
+            error.status = 400;
+            error.code = 'resend-email-key no user';
+            next(error);
         } else{
             // 이메일 인증키 생성
-            const emailVerifyKey = await crypto.randomBytes(100).toString('hex');
+            const emailVerifyKey = await crypto.randomBytes(100).toString('hex').substr(0,100);
             // 인증키 만료 날짜 10분
             const keyExpire = Date.now() + 600000
             const user = await User.update({
@@ -123,43 +140,58 @@ router.post('/verification/resend-email-key', isNotLoggedIn, async (req, res, ne
 
             req.userId = user.id;
             req.key = emailVerifyKey;
-            req.email = email;
+            req.email = user.email;
 
             //sendMail(req, res, next);
 
-            return res.redirect('/');
+            return res.json({status : 'okay'});
         }
     } catch(err) {
+        const error = new Error();
+        error.status = 400;
+        error.code = 'resend-email-key sudden error';
         console.error(err);
-        next(err);
+        next(error);
     }
 });
 
 // verification
 // 이메일 인증 확인
-router.get('/verification/verify-account/:id/:emailKey', isNotLoggedIn, async (req, res, next) => {
+router.get('/verification/verify-account/:id/:emailKey', async (req, res, next) => {
     const { id, emailKey } = req.params;
 
     try {
         const exUser = await User.findOne({where: {id}});
         if(!exUser){
             // TODO: 라우터 추가
-            return res.redirect('/auth/verification/verify-account?error=notExist');
+            const error = new Error();
+            error.status = 400;
+            error.code = 'verify-account no user';
+            next(error);
         } else{
+            if(exUser.emailVerification){
+                const error = new Error();
+                error.status = 400;
+                error.code = 'verify-account already verified';
+                next(error);
+            }
 
             if(exUser.emailVerifyKey == emailKey && exUser.keyExpire > Date.now()){
                 await User.update({ emailVerification : true},{where: {id}});
                 // TODO: 라우터 추가
-                return res.redirect('/auth/verification/verify-account?error=success');
+                return res.json({ status : 'okay' });
             } else{
                 // TODO: 라우터 추가
-                return res.redirect('/auth/verification/verify-account?error=keyFalse');
+                return res.json({ status : 'bad' });
             }
             
         }
     } catch(err) {
+        const error = new Error();
+        error.status = 400;
+        error.code = 'verify-account sudden error';
         console.error(err);
-        next(err);
+        next(error);
     }
 });
 
