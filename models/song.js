@@ -3,18 +3,34 @@ const Sequelize = require('sequelize');
 module.exports = class Song extends Sequelize.Model{
     static init(sequelize){
         return super.init({
+            // necessary
             title: {
                 type: Sequelize.STRING(200),
                 allowNull: false,
             },
-            cover: {
-                type: Sequelize.STRING(200),
+            songType: {
+                type: Sequelize.ENUM,
+                values: ['Rap', 'Pop', 'R&B', 'Rock', 'Country', 'Non-Music'],
+                allowNull: false,
+            },
+            view: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 0
+            },
+            // additional
+            release: {
+                type: Sequelize.DATEONLY,
                 allowNull: true,
             },
-            aboutSong: {
-                type: Sequelize.STRING(140),
+            soundcloud : {
+                type: Sequelize.STRING(150),
                 allowNull: true,
             },
+            youtube : {
+                type: Sequelize.STRING(150),
+                allowNull: true,
+            }
         }, {
             sequelize,
             timestamps: true,
@@ -28,8 +44,14 @@ module.exports = class Song extends Sequelize.Model{
     }
 
     static associate(db){
-        db.Song.belongsTo(db.User, {foreignKey: 'createUser'});
-        db.Song.hasMany(db.Lyrics, {foreignKey: 'songId'});
-        db.Song.belongsToMany(db.Artist, {through: 'SongArtist', as: 'Artists'});
+        db.Song.belongsTo(db.User);
+        db.Song.belongsTo(db.Lyrics);
+        
+        // artist
+        db.Song.belongsTo(db.Artist);
+
+        db.Song.belongsToMany(db.Artist, { through: 'Feature', as: 'Features'});
+        db.Song.belongsToMany(db.Artist, { through: 'Producer', as: 'Producers'});
+        db.Song.belongsToMany(db.Artist, { through: 'Written', as: 'Writers'});
     }
 }

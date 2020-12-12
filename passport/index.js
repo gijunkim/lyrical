@@ -9,7 +9,6 @@ module.exports = () => {
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
-
     
     passport.deserializeUser(async (id, done) => {
         try{
@@ -17,7 +16,10 @@ module.exports = () => {
             if(exUser){
                 done(null, exUser);
             } else{
-                done(err);
+                const error = new Error();
+                error.status = 396;
+                error.code = "deserializeUser no user";
+                done(error);
             }
         } catch(err){
             console.error(err);

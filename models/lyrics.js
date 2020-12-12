@@ -3,15 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = class Lyrics extends Sequelize.Model{
     static init(sequelize){
         return super.init({
-            start: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false,
-            },
-            end: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false,
-            },
-            description: {
+            lyrics: {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
@@ -28,7 +20,6 @@ module.exports = class Lyrics extends Sequelize.Model{
     }
 
     static associate(db){
-        db.Lyrics.belongsTo(db.User, {foreignKey: 'createUser'});
-        db.Lyrics.belongsTo(db.Song, {foreignKey: 'songId'});
+        db.Lyrics.hasOne(db.Song);
     }
 }

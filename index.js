@@ -12,6 +12,10 @@ dotenv.config();
 const pageRouter = require('./routes/page');
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
+const songRouter = require('./routes/song');
+const artistRouter = require('./routes/artist');
+const profileRouter = require('./routes/profile');
+
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 const cors = require('cors');
@@ -19,13 +23,12 @@ const cors = require('cors');
 const app = express();
 passportConfig(); // 패스포트 설정
 app.set('port', process.env.PORT || 8081);
-/*
 app.set('view engine', 'html');
 nunjucks.configure('views', {
     express: app,
     watch: true,
 });
-*/
+
 // TODO: change force to false
 sequelize.sync({ force: false })
 .then(() => {
@@ -57,18 +60,21 @@ app.use(passport.session());
 app.use(cors());
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/song', songRouter);
+app.use('/artist', artistRouter);
+app.use('/profile', profileRouter);
 app.use('/', pageRouter);
 
 app.use((req, res, next) => {
-    const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+    const error = new Error();
+    error.code = `${req.method} ${req.url} 라우터가 없습니다.`;
     error.status = 400;
     next(error);
 });
 
 // 에러 router
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send({'error': '에러 router'});
+    res.send({status: err.status, code: err.code});
 });
 
 app.listen(app.get('port'), () => {
