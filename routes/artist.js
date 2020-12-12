@@ -19,8 +19,6 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
             if(img === undefined) { img = 'default img'; }
             if(aboutArtist === undefined) { aboutArtist = `put some information about ${name}`; }
 
-            console.log(name, img, aboutArtist);
-
             if(exArtist){ 
                 return res.json({ status : 'bad', code : 'artist exist'}); 
             } else{

@@ -13,6 +13,11 @@ module.exports = class Song extends Sequelize.Model{
                 values: ['Rap', 'Pop', 'R&B', 'Rock', 'Country', 'Non-Music'],
                 allowNull: false,
             },
+            view: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 0
+            },
             // additional
             release: {
                 type: Sequelize.DATEONLY,
