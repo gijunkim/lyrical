@@ -76,6 +76,24 @@ class SignUpForm extends Component {
         }
     }
 
+    registerGoogle() {
+        Axios.get('http://localhost:8081/auth/google', {
+        })
+        .then((response) => {
+                console.log(response.request.responseURL);
+                window.location.href=response.request.responseURL;
+            });
+    }
+
+    registerKakao() {
+        Axios.get('http://localhost:8081/auth/kakao', {
+        })
+        .then((response) => {
+                console.log(response.request.responseURL);
+                window.location.href=response.request.responseURL;
+            });
+    }
+
     checkEmailValid(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
@@ -231,23 +249,25 @@ class SignUpForm extends Component {
                         text='Create Lyrical Account'
                         disabled={this.state.buttonDisabled}
                         onClick={() => this.register()}
+                        host="btn"
                     ></SignUpButton>
                 </div>
                 <div className="FormOthers">
                     <SignUpButton 
-                        text='Sign Up with'
+                        text='Sign Up with Google'
                         disabled={this.state.buttonDisabled}
-                        onClick={() => this.doLogin()}
-                    ></SignUpButton>
+                        icon="fab fa-google"
+                        onClick={() => this.registerGoogle()}
+                        host="btnG"
+                    >
+                    </SignUpButton>
+                    
                     <SignUpButton 
-                        text='Sign Up with'
+                        text='Sign Up with Kakao'
                         disabled={this.state.buttonDisabled}
-                        onClick={() => this.doLogin()}
-                    ></SignUpButton>
-                    <SignUpButton 
-                        text='Sign Up with'
-                        disabled={this.state.buttonDisabled}
-                        onClick={() => this.doLogin()}
+                        onClick={() => this.registerKakao()}
+                        icon=""
+                        host="btnK"
                     ></SignUpButton>
                 </div>
             </div>

@@ -8,10 +8,11 @@ class SignUpButton extends Component {
         return(
             <div className="signButton">
                 <button 
-                    className="btn"
+                    className={this.props.host}
                     disabled={this.props.disabled}
                     onClick={ () => this.props.onClick()}
                     >
+                        <i className={this.props.icon}></i>
                         {this.props.text}
                 </button>
                 

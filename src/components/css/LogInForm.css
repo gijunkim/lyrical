@@ -81,6 +81,11 @@
 .signButton {
     padding-bottom: 12px;
     padding-top: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
 }
    
 .btn {
@@ -93,4 +98,33 @@
     border-radius: 4px;
     background: black;
     cursor: pointer;
+}
+
+.btnG {
+    width: 100%;
+    color:  white;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid 2px #777;
+    border-radius: 4px;
+    background: #e47365;
+    cursor: pointer;
+}
+
+.btnK {
+    width: 100%;
+    color:  black;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid 2px #777;
+    border-radius: 4px;
+    background: #ffe500;
+    cursor: pointer;
+}
+
+.fa-google {
+    margin: 0px 7px 0px;
+    color: white;
 }

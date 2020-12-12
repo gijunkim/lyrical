@@ -46,9 +46,9 @@ router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', {
 router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'] }));
 
 router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {
-    failureRedirect: '/',
+    failureRedirect: 'http://localhost:8080',
 }), (req, res) => {
-    return res.redirect('/');
+    return res.redirect('http://localhost:8080');
 });
 
 /** 로그 아웃 **/

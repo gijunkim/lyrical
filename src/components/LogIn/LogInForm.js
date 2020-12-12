@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import InputField from "./InputField"
 import LogInButton from "./LogInButton"
+import SignUpButton from "../SignUp/SignUpButton"
+
 import '../css/LogInForm.css';
 
 
@@ -13,6 +15,24 @@ class LogInForm extends Component {
             password: '',
             buttonDisabled: false
         }
+    }
+
+    registerGoogle() {
+        Axios.get('http://localhost:8081/auth/google', {
+        })
+        .then((response) => {
+                console.log(response.request.responseURL);
+                window.location.href=response.request.responseURL;
+            });
+    }
+
+    registerKakao() {
+        Axios.get('http://localhost:8081/auth/kakao', {
+        })
+        .then((response) => {
+                console.log(response.request.responseURL);
+                window.location.href=response.request.responseURL;
+            });
     }
 
     setInputValue(property, val) {
@@ -95,6 +115,23 @@ class LogInForm extends Component {
                         disabled={this.state.buttonDisabled}
                         onClick={() => this.doLogin()}
                     ></LogInButton>
+                </div>
+                <div className="FormOthers">
+                    <SignUpButton 
+                        text='Log In with Google'
+                        disabled={this.state.buttonDisabled}
+                        icon="fab fa-google"
+                        onClick={() => this.registerGoogle()}
+                        host="btnG"
+                    >
+                    </SignUpButton>
+                    <SignUpButton 
+                        text='Log In with Kakao'
+                        disabled={this.state.buttonDisabled}
+                        onClick={() => this.registerKakao()}
+                        icon=""
+                        host="btnK"
+                    ></SignUpButton>
                 </div>
             </div>
             
