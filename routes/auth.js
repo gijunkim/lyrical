@@ -35,7 +35,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
                 console.error(loginError);
                 return next(error);
             }
-            return res.json({ 'status' : 'okay'});
+            return res.json({ 'status' : 'okay', user});
         });
     })(req, res, next);
 });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import InputField from "./InputField"
 import LogInButton from "./LogInButton"
+import Axios from 'axios'
 import SignUpButton from "../SignUp/SignUpButton"
 
 import '../css/LogInForm.css';
@@ -37,55 +38,20 @@ class LogInForm extends Component {
 
     setInputValue(property, val) {
         val = val.trim();
-        if (val.length > 12) {
-            return;
-        }
         this.setState({
             [property]: val
         })
     }
 
-    async doLogin() {
-        if (!this.state.username) {
-            return;
-        }
-        if (!this.state.password) {
-            return;
-        }
-        
-        this.setState({
-            buttonDisabled: true
-        })
-
-        try {
-            let res = await fetch('/login', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: this.state.username,
-                    password: this.state.password
-                })
+    doLogin() {
+        Axios.post('http://localhost:8081/auth/login', {
+                email: this.state.email,
+                password: this.state.password
+            }).then((response) => {
+                console.log(response);
             });
-            let result = await res.json();
-            if (result && result.success) {
-                UserStore.isLoggedIn = true;
-                UserStore.username = result.username;
-            }
-            else if (result && result.success === false) {
-                this.resetForm();
-                alert(result.msg);
-            }
-
-            
-        }
-        catch (e) {
-            console.log(e);
-            this.resetForm();
-        }
     }
+    
     render() {
         
         return(
