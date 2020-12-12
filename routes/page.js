@@ -11,8 +11,4 @@ router.get('/join', isNotLoggedIn, (req, res, next) => {
     return res.json({ status : 'okay'});
 });
 
-router.get('/profile', isLoggedIn, isEmailVerified, (req, res, next) => {
-    return res.json({ status : 'okay', user : req.user});
-});
-
 module.exports = router;

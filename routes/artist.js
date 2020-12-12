@@ -1,4 +1,6 @@
 const express = require('express');
+const { Song } = require('../models');
+
 const Artist = require('../models/artist');
 const { isLoggedIn, isEmailVerified } = require('./middlewares');
 
@@ -43,6 +45,40 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
     }
 });
 
+// GET /artist/:id
+router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
+    try{
+        const { id } = req.params;
 
+        const artist = await Artist.findAll({
+            where: { id },
+            include: [{ 
+                model: Song,
+            }, {
+                model: Song,
+                as: 'Featuring',
+            }, {
+                model: Song,
+                as: 'Producing',
+            }, {
+                model: Song,
+                as: 'Writing',
+            }],
+        });
+        
+        if(artist){
+            return res.json({ artist });
+        } else{
+            return res.json({ status : 'bad'});
+        }
+
+    } catch(err){
+        const error = new Error();
+        error.status = 399;
+        error.code = 'POST artist error';
+        console.error(err);
+        return next(error);
+    }
+});
 
 module.exports = router;

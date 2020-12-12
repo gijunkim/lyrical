@@ -1,5 +1,4 @@
 const express = require('express');
-const User = require('../models/user');
 const Song = require('../models/song');
 const Artist = require('../models/artist');
 const Lyrics = require('../models/lyrics');
@@ -7,9 +6,34 @@ const { isLoggedIn, isEmailVerified } = require('./middlewares');
 
 const router = express.Router();
 
+//  add relationship between song and features, producers, writtens
+const addRelationship = async function(artistsList, song, type){
+    const artists = artistsList.split(',');
+    const result = await Promise.all(
+        artists.map(artist => {
+            return Artist.findOne({ where: { name: artist }});
+        }),
+    );
+
+    switch(type){
+        case 'features':
+            await song.addFeatures(result.map(artist => artist.id));
+            break;
+        case 'producers':
+            await song.addProducers(result.map(artist => artist.id));
+            break;
+        case 'writtens':
+            await song.addWriters(result.map(artist => artist.id));
+            break;
+        default:
+            break;
+    }
+};
+
+
 // POST /song
 router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
-    const { artist, title, songType, lyrics, features, producers, writtens, release, soundCloud, youtube } = req.body;
+    const { artist, title, songType, lyrics, features, producers, writtens, release, soundcloud, youtube } = req.body;
 
     // TODO : 여기서도 중복체크
     // artist 없으면 먼저 만들었다고 가정 front 단에서 promise 활용
@@ -28,7 +52,7 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
             title,
             songType,
             release,
-            soundCloud,
+            soundcloud,
             youtube
         });
 
@@ -44,16 +68,20 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
 
         // featuring 추가
         if(features){
-            const feats = features.split(',');
-            const result = await Promise.all(
-                feats.map(feat => {
-                    return Artist.findOne({ where: { name: feat}});
-                }),
-            );
-            await song.addFeatures(result.map(r => r.id));
+            addRelationship(features, song, 'features');
         }
-       
-       return res.json({ status : 'okay', song });
+
+        // producer 추가
+        if(producers){
+            addRelationship(producers, song, 'producers');
+        }
+        
+        // writer 추가
+        if(writtens){
+            addRelationship(writtens, song, 'writtens');
+        }
+        
+        return res.json({ status : 'okay', song });
 
     } catch(err){
         const error = new Error();

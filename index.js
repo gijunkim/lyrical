@@ -14,6 +14,7 @@ const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const songRouter = require('./routes/song');
 const artistRouter = require('./routes/artist');
+const profileRouter = require('./routes/profile');
 
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
@@ -61,6 +62,7 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/song', songRouter);
 app.use('/artist', artistRouter);
+app.use('/profile', profileRouter);
 app.use('/', pageRouter);
 
 app.use((req, res, next) => {
