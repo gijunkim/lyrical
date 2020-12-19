@@ -7,7 +7,7 @@ function LogIn() {
   return (
     <div className='hero-container'>
         <NavBar/>
-        <LogInForm/>
+        <LogInForm/>  
         <About/>
     </div>
   );

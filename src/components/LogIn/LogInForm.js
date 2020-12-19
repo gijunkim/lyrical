@@ -3,6 +3,7 @@ import InputField from "./InputField"
 import LogInButton from "./LogInButton"
 import Axios from 'axios'
 import SignUpButton from "../SignUp/SignUpButton"
+import { withRouter } from "react-router-dom";
 
 import '../css/LogInForm.css';
 
@@ -49,6 +50,9 @@ class LogInForm extends Component {
                 password: this.state.password
             }).then((response) => {
                 console.log(response);
+                if (response.data.status === "okay") {
+                    this.props.history.push("/profile");
+                }
             });
     }
     
@@ -106,4 +110,4 @@ class LogInForm extends Component {
     }
 }
 
-export default LogInForm
+export default withRouter(LogInForm);
