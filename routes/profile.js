@@ -7,13 +7,12 @@ const { isLoggedIn, isEmailVerified} = require('./middlewares');
 
 const router = express.Router();
 
-// GET /profile/:id
-router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
+// GET /profile/:nickname
+router.get('/:nickname', isLoggedIn, isEmailVerified, async (req, res, next) => {
     try{
-        const { id } = req.params;
+        const { nickname } = req.params;
 
-        const user = await User.findOne({
-            where: { id },
+        const user = await User.findOne({where: { nickname },
             include: [{ 
                 model: Song, 
             }],
@@ -21,14 +20,16 @@ router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
         });
 
         if(user){
+            res.status(200);
             return res.json({ user });
         } else{
-            return res.json({ status : 'bad'});
+            res.status(204);
+            return res.json();
         }
     } catch(err){
         const error = new Error();
-        error.status = 399;
-        error.code = 'GET profile error';
+        error.status = 500;
+        error.message = 'GET /profile/:nickname 에서 에러가 발생하였습니다.';
         console.error(err);
         return next(error);
     }

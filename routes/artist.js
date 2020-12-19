@@ -14,42 +14,61 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
     // ex) Harry Styles, harrystyles, BTS, 방탄소년단 등
     if(name){
         try{
-            const exArtist = await Artist.findOne({ where: { name }});
+            // name으로 url을 생성
+            const url = name.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+
+            const exArtist = await Artist.findOne({ where: { url } });
             
             if(img === undefined) { img = 'default img'; }
             if(aboutArtist === undefined) { aboutArtist = `put some information about ${name}`; }
 
             if(exArtist){ 
-                return res.json({ status : 'bad', code : 'artist exist'}); 
+                const error = new Error();
+                error.status = 403;
+                error.message = `${url}의 URL을 가지는 아티스트가 이미 존재합니다.`;
+                next(error);
             } else{
                 const artist = await Artist.create({
                     name,
+                    url,
                     img,
                     aboutArtist
                 });
 
-                return res.json({ status : 'okay', artist});
+                // 생성 완료
+                res.status(201);
+                return res.json({ artist });
             }
 
         } catch(err){
             const error = new Error();
-            error.status = 399;
-            error.code = 'POST artist error';
+            error.status = 500;
+            error.message = 'POST /artist 에서 에러가 발생하였습니다.';
             console.error(err);
-            return next(error);
+            next(error);
         }
     } else{
-        return res.json({ status: 'bad'});
+        const error = new Error();
+        error.status = 400;
+        error.message = 'POST /artist name field가 들어오지 않았습니다.';
+        next(error);
     }
 });
 
-// GET /artist/:id
-router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
+// GET /artist/:url
+router.get('/:url', isLoggedIn, isEmailVerified, async (req, res, next) => {
     try{
-        const { id } = req.params;
+        const { url } = req.params;
 
-        const artist = await Artist.findAll({
-            where: { id },
+        // url이 형식과 맞는지 확인
+        if(url.match(/[^a-z0-9\-]/i)){
+            const error = new Error();
+            error.status = 400;
+            error.message = "artist URL이 형식에 맞지 않습니다.";
+            return next(error);
+        }
+
+        const artist = await Artist.findAll({ where: { url },
             include: [{ 
                 model: Song,
             }, {
@@ -65,15 +84,17 @@ router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
         });
         
         if(artist){
+            res.status(200);
             return res.json({ artist });
         } else{
-            return res.json({ status : 'bad'});
+            res.status(204);
+            return res.json();
         }
 
     } catch(err){
         const error = new Error();
-        error.status = 399;
-        error.code = 'POST artist error';
+        error.status = 500;
+        error.message = 'GET /artist/:url 에서 에러가 발생하였습니다.';
         console.error(err);
         return next(error);
     }

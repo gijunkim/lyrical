@@ -7,6 +7,11 @@ module.exports = class Artist extends Sequelize.Model{
                 type: Sequelize.STRING(50),
                 allowNull: false,
             },
+            url: {
+                type: Sequelize.STRING(150),
+                allowNull: false,
+                unique: true,
+            },
             img: {
                 type: Sequelize.STRING(200),
                 allowNull: true,
