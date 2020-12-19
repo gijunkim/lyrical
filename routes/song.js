@@ -122,4 +122,53 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
 });
 
 
+// GET /song/:artistURL/:songURL
+router.get('/:artistURL/:songURL', async (req, res, next) => {
+    try{
+        const { aritstURL, songURL } = req.params;
+
+        // url이 형식과 맞는지 확인
+        if(aritstURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
+            const error = new Error();
+            error.status = 400;
+            error.message = "artist URL 또는 song URL이 형식에 맞지 않습니다.";
+            return next(error);
+        }
+
+        const exSong = await Artist.findOne({ where : { url : artistURL }}).getSong({ 
+            where: { url: songURL },
+            include: [
+                {
+                    model: Artist,
+                    as: 'Features',
+                }, {
+                    model: Artist,
+                    as: 'Producers',
+                }, {
+                    model: Artist,
+                    as: 'Writers',
+                }, {
+                    model: Lyrics,
+                }
+            ]
+        });
+
+        if(exSong){
+            res.status(200);
+            return res.json({ song: exSong});
+        } else {
+            res.status(204);
+            return res.json();
+        }
+
+    } catch(err){
+        const error = new Error();
+        error.status = 500;
+        error.message = 'GET /song/:artistURL/:songURL 과정에서 에러가 발생하였습니다.';
+        console.error(err);
+        return next(error);
+    }
+
+});
+
 module.exports = router;
