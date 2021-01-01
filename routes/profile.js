@@ -1,14 +1,12 @@
 const express = require('express');
-const { Song } = require('../models');
+const { Song, User } = require('../models');
 
-const User = require('../models/user');
-
-const { isLoggedIn, isEmailVerified} = require('./middlewares');
+const { verifyToken, isEmailVerified} = require('./middlewares');
 
 const router = express.Router();
 
 // GET /profile/:nickname
-router.get('/:nickname', isLoggedIn, isEmailVerified, async (req, res, next) => {
+router.get('/:nickname', async (req, res, next) => {
     try{
         const { nickname } = req.params;
 

@@ -1,9 +1,8 @@
 const express = require('express');
-const Song = require('../models/song');
-const Artist = require('../models/artist');
-const Lyrics = require('../models/lyrics');
 
-const { isLoggedIn, isEmailVerified } = require('./middlewares');
+const { Song, Artist, Annotation } = require('../models');
+
+const { verifyToken, isEmailVerified } = require('./middlewares');
 
 const router = express.Router();
 
@@ -33,7 +32,7 @@ const addRelationship = async function(artistsList, song, type){
 
 
 // POST /song
-router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
+router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
     const { artist, title, songType, lyrics, features, producers, writtens, release, soundcloud, youtube } = req.body;
 
     if(!artist || !title || !songType || !lyrics){
@@ -79,20 +78,16 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
             title,
             url : songURL,
             songType,
+            lyrics,
             release,
             soundcloud,
             youtube
-        });
-
-        const lyr = await Lyrics.create({
-            lyrics
         });
 
         // user 추가
         await song.setUser(req.user);
         // artist 추가
         await song.setArtist(exArtist);
-        await song.setLyric(lyr);
 
         // featuring 추가
         if(features){
@@ -125,16 +120,17 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
 // GET /song/:artistURL/:songURL
 router.get('/:artistURL/:songURL', async (req, res, next) => {
     try{
-        const { aritstURL, songURL } = req.params;
+        const { artistURL, songURL } = req.params;
 
         // url이 형식과 맞는지 확인
-        if(aritstURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
+        if(artistURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
             const error = new Error();
             error.status = 400;
             error.message = "artist URL 또는 song URL이 형식에 맞지 않습니다.";
             return next(error);
         }
 
+        console.log(await Artist.findOne({ where : { url : artistURL }}));
         const exSong = await Artist.findOne({ where : { url : artistURL }}).getSong({ 
             where: { url: songURL },
             include: [
@@ -148,7 +144,7 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
                     model: Artist,
                     as: 'Writers',
                 }, {
-                    model: Lyrics,
+                    model: Annotation,
                 }
             ]
         });
@@ -165,6 +161,57 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
         const error = new Error();
         error.status = 500;
         error.message = 'GET /song/:artistURL/:songURL 과정에서 에러가 발생하였습니다.';
+        console.error(err);
+        return next(error);
+    }
+
+});
+
+// POST /song/:artistURL/:songURL/annotation
+router.post('/:artistURL/:songURL/annotation', verifyToken, isEmailVerified ,async (req, res, next) => {
+    try{
+        const { artistURL, songURL } = req.params;
+        const { before, offset, length, lyrics, annotation, after} = req.body;
+
+        // url이 형식과 맞는지 확인
+        if(artistURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
+            const error = new Error();
+            error.status = 400;
+            error.message = "artist URL 또는 song URL이 형식에 맞지 않습니다.";
+            return next(error);
+        }
+
+        const exSong = await Artist.findOne({ where : { url : artistURL }}).getSong({ 
+            where: { url: songURL }
+        });
+
+        // TODO : 중복체크 및 제대로 들어왔는지 확인
+        const newAnnotation = await Annotation.create({
+            before,
+            offset,
+            length,
+            lyrics,
+            annotation,
+            after
+        });
+
+        await exSong.setAnnotation(newAnnotation);
+
+        console.log(exSong);
+        console.log(newAnnotation);
+
+        if(exSong){
+            res.status(200);
+            return res.json({ song: exSong});
+        } else {
+            res.status(204);
+            return res.json();
+        }
+
+    } catch(err){
+        const error = new Error();
+        error.status = 500;
+        error.message = 'POST /song/:artistURL/:songURL/annotation 과정에서 에러가 발생하였습니다.';
         console.error(err);
         return next(error);
     }

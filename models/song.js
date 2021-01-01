@@ -22,6 +22,10 @@ module.exports = class Song extends Sequelize.Model{
                 allowNull: false,
                 defaultValue: 0
             },
+            lyrics: {
+                type: Sequelize.TEXT,
+                allowNull: false,
+            },
             // additional
             release: {
                 type: Sequelize.DATEONLY,
@@ -49,7 +53,6 @@ module.exports = class Song extends Sequelize.Model{
 
     static associate(db){
         db.Song.belongsTo(db.User);
-        db.Song.belongsTo(db.Lyrics);
         
         // artist
         db.Song.belongsTo(db.Artist);
@@ -57,5 +60,7 @@ module.exports = class Song extends Sequelize.Model{
         db.Song.belongsToMany(db.Artist, { through: 'Feature', as: 'Features'});
         db.Song.belongsToMany(db.Artist, { through: 'Producer', as: 'Producers'});
         db.Song.belongsToMany(db.Artist, { through: 'Written', as: 'Writers'});
+
+        db.Song.hasMany(db.Annotation);
     }
 }

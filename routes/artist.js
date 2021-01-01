@@ -1,13 +1,12 @@
 const express = require('express');
-const { Song } = require('../models');
+const { Song, Artist } = require('../models');
 
-const Artist = require('../models/artist');
-const { isLoggedIn, isEmailVerified } = require('./middlewares');
+const { verifyToken, isEmailVerified } = require('./middlewares');
 
 const router = express.Router();
 
 // POST /artist
-router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
+router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
     let { name, img, aboutArtist } = req.body;
 
     // TODO : 동일한 이름 어떻게 중복체크를 할 것인가
@@ -56,7 +55,7 @@ router.post('/', isLoggedIn, isEmailVerified, async (req, res, next) => {
 });
 
 // GET /artist/:url
-router.get('/:url', isLoggedIn, isEmailVerified, async (req, res, next) => {
+router.get('/:url', async (req, res, next) => {
     try{
         const { url } = req.params;
 

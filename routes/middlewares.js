@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
-exports.verifyToken = (req, res, next) => {
+exports.verifyToken = async (req, res, next) => {
     try{
         req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
+        req.user = await User.findOne({ where: {id : req.decoded.id}});
         return next();
     } catch(err){
         if(err.name === 'TokenExpiredError'){ // 유효 기간 초과
@@ -21,42 +23,32 @@ exports.verifyToken = (req, res, next) => {
     }
 }
 
-exports.isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        next();
-    } else{
+exports.notVerifyToken = (req, res, next) => {
+    try{
+        req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
+
         const error = new Error();
-        error.status = 401;
-        error.message = '로그인 후 이용할 수 있는 서비스 입니다.';
-        error.type = 'login';
+        error.status = 419;
+        error.message = '이미 로그인 되어 있는 사용자 입니다.';
+        error.type = 'token';
+
         return next(error);
+    } catch(err){
+        return next();
     }
 }
 
-exports.isNotLoggedIn = (req, res, next) => {
-    if(!req.isAuthenticated()){
-        next();
-    } else{
-        const error = new Error();
-        error.status = 401;
-        error.message = '로그인 상태에서 이용할 수 없는 서비스 입니다.';
-        error.type = 'logout';
-        return next(error);
-    }
-}
 
 exports.isEmailVerified = (req, res, next) => {
     try{
-        if(req.isAuthenticated()){
-            if(req.user.emailVerification){
-                next();
-            } else{
-                const error = new Error();
-                error.status = 401;
-                error.message = '이메일 인증 후 이용할 수 있는 서비스 입니다.';
-                error.type = 'email';
-                return next(error);
-            }
+        if(req.user.emailVerification){
+            next();
+        } else{
+            const error = new Error();
+            error.status = 401;
+            error.message = '이메일 인증 후 이용할 수 있는 서비스 입니다.';
+            error.type = 'email';
+            return next(error);
         }
     } catch(err){
         const error = new Error();
