@@ -3,7 +3,6 @@ import '../css/LogInForm.css';
 
 
 class LogInButton extends Component {
-
     render() {
         return(
             <div className="loginButton">

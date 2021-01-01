@@ -1,44 +1,80 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { MenuItems } from "./MenuItems";
 
-import LogIn from "../pages/LogIn"
+import LogIn from "../pages/LogIn";
+import AuthService from "../../services/auth.service";
 
-import '../css/NavBar.css';
-import { Link } from 'react-router-dom';
+import "../css/NavBar.css";
+import { Link } from "react-router-dom";
 
 class NavBar extends Component {
-    render() {
-        return(
-            <nav className="NavBarItems">
-                
-                <div className="menu-icon">
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
 
-                </div>
-                <ul className="nav-menu">
-                    {MenuItems.map((item, index) => {
-                        return (
-                            <li key={index}>
-                                <a className={item.cName} href={item.url}>
-                                    {item.title}
-                                </a>
-                            </li>
-                        )
-                    })}
-                    <div className="socialIcons">
-                        <i className="fab fa-facebook"></i>
-                        <i className="fab fa-twitter"></i>
-                        <i className="fab fa-youtube"></i>
-                    </div>
-                </ul>
-                <div className="signInUpButtons">
-                    <Link to="/signup" className="signUpButton">회원가입</Link>
-                    <Link to="/login" className="signInButton">로그인</Link>
-                </div>
-                
-            </nav>
-                
-        )
+    this.state = {
+      currentUser: undefined,
+    };
+  }
+
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
     }
+  }
+
+  logOut() {
+    AuthService.logout();
+  }
+
+  render() {
+    const { currentUser } = this.state;
+    return (
+      <nav className="NavBarItems">
+        <div className="menu-icon"></div>
+        <ul className="nav-menu">
+          {MenuItems.map((item, index) => {
+            return (
+              <li key={index}>
+                <a className={item.cName} href={item.url}>
+                  {item.title}
+                </a>
+              </li>
+            );
+          })}
+          <div className="socialIcons">
+            <i className="fab fa-facebook"></i>
+            <i className="fab fa-twitter"></i>
+            <i className="fab fa-youtube"></i>
+          </div>
+        </ul>
+
+        {currentUser ? (
+          <div className="signInUpButtons">
+            <Link to="/profile" className="signUpButton">
+              Hello, {currentUser.user.nickname}!
+            </Link>
+            <a href="/login" className="signInButton" onClick={this.logOut}>
+              로그아웃
+            </a>
+          </div>
+        ) : (
+          <div className="signInUpButtons">
+            <Link to="/signup" className="signUpButton">
+              회원가입
+            </Link>
+            <Link to="/login" className="signInButton">
+              로그인
+            </Link>
+          </div>
+        )}
+      </nav>
+    );
+  }
 }
 
-export default NavBar
+export default NavBar;

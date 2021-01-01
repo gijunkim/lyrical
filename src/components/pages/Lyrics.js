@@ -1,18 +1,18 @@
 import React from 'react';
 import NavBar from '../NavBar/NavBar';
 import About from '../AboutFooter/About';
-import LogInForm from '../LogIn/LogInForm';
+import LyricsHeader from '../Lyrics/LyricsHeader';
+import LyricsText from '../Lyrics/LyricsText';
 
-import AuthService from '../../services/auth.service';
-
-function LogIn() {
+function Lyrics() {
   return (
     <div className='hero-container'>
         <NavBar/>
-        <LogInForm/>  
+        <LyricsHeader/>
+        <LyricsText/>
         <About/>
     </div>
   );
 }
 
-export default LogIn;
+export default Lyrics;

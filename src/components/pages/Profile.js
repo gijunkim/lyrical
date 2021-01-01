@@ -4,7 +4,6 @@ import About from '../AboutFooter/About';
 import ProfileForm from '../Profile/ProfileForm';
 
 function Profile() {
-useEffect(() => console.log('mounted'), []);
   return (
     <div className='hero-container'>
         <NavBar/>

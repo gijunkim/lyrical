@@ -3,6 +3,9 @@ import InputField from "../LogIn/InputField"
 import SignUpButton from "./SignUpButton"
 import Axios from 'axios'
 import '../css/LogInForm.css';
+import { withRouter } from "react-router-dom";
+
+import AuthService from '../../services/auth.service';
 
 
 class SignUpForm extends Component {
@@ -27,6 +30,12 @@ class SignUpForm extends Component {
             emailDuplicate: false,
             nicknameDuplicate: false,
         }
+    }
+
+    componentDidMount() {
+        if (AuthService.getCurrentUser()) {
+            this.props.history.push('/profile');
+          }        
     }
 
     register() {
@@ -277,4 +286,4 @@ class SignUpForm extends Component {
     }
 }
 
-export default SignUpForm
+export default withRouter(SignUpForm);

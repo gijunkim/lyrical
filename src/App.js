@@ -3,6 +3,8 @@ import Home from "./components/pages/Home";
 import LogIn from "./components/pages/LogIn";
 import SignUp from "./components/pages/SignUp";
 import Profile from "./components/pages/Profile";
+import Lyrics from "./components/pages/Lyrics";
+
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Fragment } from "react";
 import "./App.css";
@@ -28,6 +30,7 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={LogIn} />
             <Route path="/signup" component={SignUp} />
+            <Route path="/lyrics" component={Lyrics} />
 
             <Route path="/profile" component={Profile} />
           </Switch>
