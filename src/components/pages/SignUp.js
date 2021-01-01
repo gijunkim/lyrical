@@ -1,18 +1,16 @@
 import React from 'react';
 import NavBar from '../NavBar/NavBar';
 import About from '../AboutFooter/About';
-import LogInForm from '../LogIn/LogInForm';
+import SignUpForm from '../SignUp/SignUpForm';
 
-import AuthService from '../../services/auth.service';
-
-function LogIn() {
+function SignUp() {
   return (
     <div className='hero-container'>
         <NavBar/>
-        <LogInForm/>  
+        <SignUpForm/>
         <About/>
     </div>
   );
 }
 
-export default LogIn;
+export default SignUp;

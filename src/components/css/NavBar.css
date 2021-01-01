@@ -65,7 +65,7 @@
     right: 10px;
 }
 
-.signUpButton, .signInButton {
+.signUpButton, .signInButton, .profileButton {
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -87,3 +87,5 @@
     transition: all 0.2s ease-out;
     cursor: pointer;
 }
+
+

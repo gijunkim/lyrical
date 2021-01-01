@@ -1,0 +1,51 @@
+.LyricsHeaderContainer {
+    display:flex;
+    justify-content: center;
+    height: 300px;
+    padding: 30px;
+}
+
+.LyricsTextContainer {
+    display:flex;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.LyricsHeaderCard {
+    border: 2px solid black;
+    width: 55%;
+    padding: 20px;
+}
+
+.LyricsTextCard {
+    width: 55%;
+    padding: 20px;
+}
+
+.Title {
+    font-size: 3rem;
+    margin-bottom: 5px;
+    color: #2A363B;
+}
+
+.Artist {
+    font-size: 2.1rem;
+    margin-bottom: 5px;
+    color: #99B898;
+}
+
+.Album {
+    font-size: 1.2rem;
+    color: #FF847C;
+    margin-bottom: 50px;
+}
+
+.Date {
+    font-size: 1rem;
+    color: #FECEAB;
+}
+
+.Lyrics {
+    font-size: 1.3rem;
+    color: #2A363B;
+}

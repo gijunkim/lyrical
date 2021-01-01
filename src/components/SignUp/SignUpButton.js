@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import '../css/LogInForm.css';
 
 
-class LogInButton extends Component {
+class SignUpButton extends Component {
+
     render() {
         return(
-            <div className="loginButton">
+            <div className="signButton">
                 <button 
-                    className="btn"
+                    className={this.props.host}
                     disabled={this.props.disabled}
                     onClick={ () => this.props.onClick()}
                     >
+                        <i className={this.props.icon}></i>
                         {this.props.text}
                 </button>
                 
@@ -21,4 +23,4 @@ class LogInButton extends Component {
     }
 }
 
-export default LogInButton
+export default SignUpButton
