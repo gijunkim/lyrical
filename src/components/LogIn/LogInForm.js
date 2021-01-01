@@ -20,6 +20,12 @@ class LogInForm extends Component {
             buttonDisabled: false,
         }
     }
+    
+    componentDidMount() {
+        if (AuthService.getCurrentUser()) {
+            this.props.history.push('/profile');
+          }        
+    }
 
     registerGoogle() {
         Axios.get('http://localhost:8081/auth/google', {
@@ -55,6 +61,12 @@ class LogInForm extends Component {
                 }
             });
     }
+
+    handleEnter(event) {
+        if (event.keyCode === 13) {
+            this.doLogin();
+        }
+    }
     
     render() {
         return(
@@ -70,6 +82,7 @@ class LogInForm extends Component {
                         value={this.state.email ? this.state.email : ''}
                         error={false}
                         onChange={ (val) => this.setInputValue("email", val) }
+                        onKeyDown={(e) => this.handleEnter(e) }
                     />
                     <h1 className="InputHeader">Lyrical Password</h1>
                     <InputField
@@ -78,6 +91,7 @@ class LogInForm extends Component {
                         value={this.state.password ? this.state.password : ''}
                         error={false}
                         onChange={ (val) => this.setInputValue("password", val) }
+                        onKeyDown={(e) => this.handleEnter(e) }
                     />
                     <LogInButton 
                         text='Log In'

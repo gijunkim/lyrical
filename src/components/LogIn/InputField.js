@@ -13,6 +13,7 @@ class InputField extends Component {
                     placeholder={this.props.placeholder}
                     value={this.props.value}
                     onChange={ (e) => this.props.onChange(e.target.value)}
+                    onKeyDown={ (e) => this.props.onKeyDown(e)}
                     >
                 </input>
                 
