@@ -54,7 +54,7 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 
 app.use(cors());
 
@@ -67,14 +67,15 @@ app.use('/', pageRouter);
 
 app.use((req, res, next) => {
     const error = new Error();
-    error.code = `${req.method} ${req.url} 라우터가 없습니다.`;
-    error.status = 400;
+    error.message = `${req.method} ${req.url} 라우터가 없습니다.`;
+    error.status = 404;
     next(error);
 });
 
 // 에러 router
 app.use((err, req, res, next) => {
-    res.send({status: err.status, code: err.code});
+    res.status(err.status);
+    return res.send({message : err.message});
 });
 
 app.listen(app.get('port'), () => {

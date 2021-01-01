@@ -8,6 +8,10 @@ module.exports = class Song extends Sequelize.Model{
                 type: Sequelize.STRING(200),
                 allowNull: false,
             },
+            url: {
+                type: Sequelize.STRING(150),
+                allowNull: false,
+            },
             songType: {
                 type: Sequelize.ENUM,
                 values: ['Rap', 'Pop', 'R&B', 'Rock', 'Country', 'Non-Music'],
