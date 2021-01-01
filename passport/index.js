@@ -6,6 +6,7 @@ const google = require('./googleStrategy');
 const User = require('../models/user');
 
 module.exports = () => {
+    /*
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
@@ -26,7 +27,7 @@ module.exports = () => {
             done(err);
         }
     });
-    
+    */
 
     local();
     kakao();

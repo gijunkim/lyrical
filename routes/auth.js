@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const passport = require('passport');
@@ -15,7 +16,7 @@ const { body, validationResult} = require('express-validator');
 
 // 로컬 로그인
 router.post('/login', isNotLoggedIn, (req, res, next) => {
-    passport.authenticate('local', (authError, user, message) => {
+    passport.authenticate('local', { session: false }, (authError, user, message) => {
         if(authError){
             const error = new Error();
             error.status = 500;
@@ -29,7 +30,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
             error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
             return next(error);
         }
-        return req.login(user, (loginError) => {
+        return req.login(user, { session: false }, (loginError) => {
             if(loginError){
                 const error = new Error();
                 error.status = 500;
@@ -37,27 +38,59 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
                 console.log(loginError);
                 return next(error);
             }
-            res.status(204);
-            return res.json();
+
+            const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
+            res.status(200);
+            return res.json({user, token});
         });
     })(req, res, next);
 });
 
 // 카카오 로그인
-router.get('/kakao', isNotLoggedIn, passport.authenticate('kakao'));
+router.get('/kakao', isNotLoggedIn, passport.authenticate('kakao', { session: false }));
 
-router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao'), (req, res) => {
-    res.status(204);
-    return res.json();
-});
+router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', { session: false }, (authError, user) => {
+    if(authError){
+        const error = new Error();
+        error.status = 500;
+        error.message = `local login authError ${authError}`;
+        console.log(authError);
+        return next(error);
+    }
+    if(!user){
+        const error = new Error();
+        error.status = 400;
+        error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
+        return next(error);
+    }
+
+    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
+    res.status(200);
+    return res.json({user, token});
+}));
 
 // 구글 로그인
-router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'] }));
+router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'], session : false }));
 
-router.get('/google/callback', isNotLoggedIn, passport.authenticate('google'), (req, res) => {
-    res.status(204);
-    return res.json();
-});
+router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {session : false}, (authError, user) => {
+    if(authError){
+        const error = new Error();
+        error.status = 500;
+        error.message = `local login authError ${authError}`;
+        console.log(authError);
+        return next(error);
+    }
+    if(!user){
+        const error = new Error();
+        error.status = 400;
+        error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
+        return next(error);
+    }
+
+    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
+    res.status(200);
+    return res.json({user, token});
+}));
 
 /** 로그 아웃 **/
 router.get('/logout', isLoggedIn, (req, res, next) => {

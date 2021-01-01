@@ -1,9 +1,38 @@
 const express = require('express');
 const User = require('../models/user');
-const { isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn, isEmailVerified, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+// GET /user/:id
+router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
+    try{
+        const { id } = req.params;
+
+        const user = await User.findOne({where: { id },
+            include: [{ 
+                model: Song, 
+            }],
+            attributes: ['id', 'nickname', 'name', 'email', 'provider']
+        });
+
+        if(user){
+            res.status(200);
+            return res.json({ user });
+        } else{
+            res.status(204);
+            return res.json();
+        }
+    } catch(err){
+        const error = new Error();
+        error.status = 500;
+        error.message = 'GET /user/:id 에서 에러가 발생하였습니다.';
+        console.error(err);
+        return next(error);
+    }
+});
+
+// POST /user/exist
 router.post('/exist', isNotLoggedIn, async (req, res, next) => {
     const { nickname, email } = req.body;
     // nickname 중복체크
