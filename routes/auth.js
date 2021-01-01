@@ -38,7 +38,6 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
                 console.log(loginError);
                 return next(error);
             }
-
             const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
             res.status(200);
             return res.json({user, token});
@@ -91,6 +90,7 @@ router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {s
     res.status(200);
     return res.json({user, token});
 }));
+
 
 /** 로그 아웃 **/
 router.get('/logout', isLoggedIn, (req, res, next) => {

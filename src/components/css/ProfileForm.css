@@ -1,0 +1,50 @@
+.ProfileFormContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.ProfileFormHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    flex-direction: column;    
+}
+
+.ProfileFormTitle{
+    color: black;
+}
+
+.ProfileStatContainer {
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+
+.StatItemsContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px;
+    width: 20%;
+}
+
+.StatItem {
+    align-self: center;
+    padding: 18px;
+    font-size: 1.4rem;
+}
+
+.StatNumber {
+    padding-left: 10px;
+    font-size:1.4rem;
+    font-weight: bold;
+}
+
+.fa-file-alt, .fa-pencil-alt, .fa-comments {
+    margin: 0px 10px 0px;
+}
