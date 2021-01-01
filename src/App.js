@@ -1,37 +1,35 @@
-import React from 'react';
-import Home from './components/pages/Home';
-import LogIn from './components/pages/LogIn';
-import SignUp from './components/pages/SignUp'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Fragment } from 'react';
-import './App.css'
-
+import React, { useState, useEffect } from "react";
+import Home from "./components/pages/Home";
+import LogIn from "./components/pages/LogIn";
+import SignUp from "./components/pages/SignUp";
+import Profile from "./components/pages/Profile";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Fragment } from "react";
+import "./App.css";
 
 class App extends React.Component {
-  
   constructor(props) {
     super(props);
     this.state = {
-        username:null
+      user: null
     };
   }
 
   componentDidMount() {
-    fetch('http://localhost:8081/')
-        .then(res=>res.json())
-        .then(data=>this.setState({username:data.username}));
+    fetch("http://localhost:8081/")
+      .then((res) => res.json())
+      .then((data) => this.setState({ username: data.username }));
   }
-
-  render() { 
-    const {username} = this.state;
-    console.log(username);
+  render() {
     return (
       <Fragment>
         <Router>
           <Switch>
-            <Route exact path="/" component={Home}/>
+            <Route exact path="/" component={Home} />
             <Route path="/login" component={LogIn} />
             <Route path="/signup" component={SignUp} />
+
+            <Route path="/profile" component={Profile} />
           </Switch>
         </Router>
       </Fragment>
