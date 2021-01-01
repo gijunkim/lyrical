@@ -1,11 +1,11 @@
 const express = require('express');
 const User = require('../models/user');
-const { isLoggedIn, isEmailVerified, isNotLoggedIn } = require('./middlewares');
+const { verifyToken, isEmailVerified, notVerifyToken } = require('./middlewares');
 
 const router = express.Router();
 
 // GET /user/:id
-router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     try{
         const { id } = req.params;
 
@@ -33,7 +33,7 @@ router.get('/:id', isLoggedIn, isEmailVerified, async (req, res, next) => {
 });
 
 // POST /user/exist
-router.post('/exist', isNotLoggedIn, async (req, res, next) => {
+router.post('/exist', notVerifyToken, async (req, res, next) => {
     const { nickname, email } = req.body;
     // nickname 중복체크
     if(nickname){

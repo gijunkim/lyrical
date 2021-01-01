@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
-const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
+const { verifyToken, notVerifyToken } = require('./middlewares');
 const passport = require('passport');
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const { body, validationResult} = require('express-validator');
 /** 로그인 **/
 
 // 로컬 로그인
-router.post('/login', isNotLoggedIn, (req, res, next) => {
+router.post('/login', notVerifyToken, (req, res, next) => {
     passport.authenticate('local', { session: false }, (authError, user, message) => {
         if(authError){
             const error = new Error();
@@ -38,7 +38,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
                 console.log(loginError);
                 return next(error);
             }
-            const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
+            const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
             res.status(200);
             return res.json({user, token});
         });
@@ -46,54 +46,60 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 });
 
 // 카카오 로그인
-router.get('/kakao', isNotLoggedIn, passport.authenticate('kakao', { session: false }));
+router.get('/kakao', notVerifyToken, passport.authenticate('kakao', { session: false }));
 
-router.get('/kakao/callback', isNotLoggedIn, passport.authenticate('kakao', { session: false }, (authError, user) => {
-    if(authError){
-        const error = new Error();
-        error.status = 500;
-        error.message = `local login authError ${authError}`;
-        console.log(authError);
-        return next(error);
-    }
-    if(!user){
-        const error = new Error();
-        error.status = 400;
-        error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
-        return next(error);
-    }
+router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
+    passport.authenticate('kakao', { session: false }, (authError, user) => {
+        if(authError){
+            const error = new Error();
+            error.status = 500;
+            error.message = `local login authError ${authError}`;
+            console.log(authError);
+            return next(error);
+        }
+        if(!user){
+            const error = new Error();
+            error.status = 400;
+            error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
+            return next(error);
+        }
 
-    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
-    res.status(200);
-    return res.json({user, token});
-}));
+        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
+        res.status(200);
+        console.log({user, token});
+        return res.json({user, token});
+    })(req, res, next);
+});
 
 // 구글 로그인
-router.get('/google', isNotLoggedIn, passport.authenticate('google', { scope: ['profile' , 'email'], session : false }));
+router.get('/google', notVerifyToken, passport.authenticate('google', { scope: ['profile' , 'email'], session : false }));
 
-router.get('/google/callback', isNotLoggedIn, passport.authenticate('google', {session : false}, (authError, user) => {
-    if(authError){
-        const error = new Error();
-        error.status = 500;
-        error.message = `local login authError ${authError}`;
-        console.log(authError);
-        return next(error);
-    }
-    if(!user){
-        const error = new Error();
-        error.status = 400;
-        error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
-        return next(error);
-    }
+router.get('/google/callback', notVerifyToken, (req, res, next) => {
+    passport.authenticate('google', {session : false}, (authError, user) => {
+        if(authError){
+            const error = new Error();
+            error.status = 500;
+            error.message = `local login authError ${authError}`;
+            console.log(authError);
+            return next(error);
+        }
+        if(!user){
+            const error = new Error();
+            error.status = 400;
+            error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
+            return next(error);
+        }
 
-    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '1m', issuer : 'lyrical'});
-    res.status(200);
-    return res.json({user, token});
-}));
+        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
+        res.status(200);
+        console.log({user, token});
+        return res.json({user, token});
+    })(req, res, next);
+});
 
 
 /** 로그 아웃 **/
-router.get('/logout', isLoggedIn, (req, res, next) => {
+router.get('/logout', verifyToken, (req, res, next) => {
     req.logout();
     req.session.destroy();
     res.status(204);
@@ -101,7 +107,7 @@ router.get('/logout', isLoggedIn, (req, res, next) => {
 });
 
 /** 회원가입 **/
-router.post('/join', isNotLoggedIn, [ body('email').isEmail() ], async (req, res, next) => {
+router.post('/join', notVerifyToken, [ body('email').isEmail() ], async (req, res, next) => {
     const { nickname, name, email, password } = req.body;
 
     // 들어온 데이터가 없는 경우
@@ -181,7 +187,7 @@ router.post('/join', isNotLoggedIn, [ body('email').isEmail() ], async (req, res
 
 /** verification **/
 // 이메일 인증 키 재전송
-router.post('/verification/resend-email-key', isLoggedIn, async (req, res, next) => {
+router.post('/verification/resend-email-key', verifyToken, async (req, res, next) => {
     const { id } = req.body;
 
     try {
