@@ -5,6 +5,8 @@ import Axios from 'axios'
 import SignUpButton from "../SignUp/SignUpButton"
 import { withRouter } from "react-router-dom";
 
+import AuthService from "../services/auth.service";
+
 import '../css/LogInForm.css';
 
 
@@ -45,12 +47,10 @@ class LogInForm extends Component {
     }
 
     doLogin() {
-        Axios.post('http://localhost:8081/auth/login', {
-                email: this.state.email,
-                password: this.state.password
-            }).then((response) => {
+        AuthService.login(this.state.email, this.state.password)
+            .then((response) => {
                 console.log(response);
-                if (response.data.status === "okay") {
+                if (response.status === "okay") {
                     this.props.history.push("/profile");
                 }
             });
