@@ -1,7 +1,9 @@
 import React from 'react'
 import { useTable } from 'react-table'
+import { withRouter } from 'react-router'
 import styled from 'styled-components'
 import makeData from './makeData'
+import { useHistory } from "react-router-dom";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -72,6 +74,16 @@ function Table({ columns, data }) {
     data,
   })
 
+  const history = useHistory();
+
+  const onRowClick = (state, rowInfo, column, instance) => {
+    return {
+        onClick: (e, handleOriginal) => {
+          history.push('/lyrics');
+        }
+    }
+}
+
   // Render the UI for your table
   return (
     <table {...getTableProps()}>
@@ -88,7 +100,7 @@ function Table({ columns, data }) {
         {rows.map((row, i) => {
           prepareRow(row)
           return (
-            <tr {...row.getRowProps()}>
+            <tr key={i} {...row.getRowProps(onRowClick)}>
               {row.cells.map(cell => {
                 return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
               })}
@@ -100,7 +112,7 @@ function Table({ columns, data }) {
   )
 }
 
-function CharTable() {
+function ChartTable() {
   const columns = React.useMemo(
     () => [
       {
@@ -154,4 +166,4 @@ function CharTable() {
   )
 }
 
-export default CharTable
+export default withRouter(ChartTable)
