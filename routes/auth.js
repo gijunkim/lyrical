@@ -10,6 +10,8 @@ const passport = require('passport');
 const router = express.Router();
 
 const { body, validationResult} = require('express-validator');
+const { useReducer } = require('react');
+const { session } = require('passport');
 
 
 /** 로그인 **/
@@ -30,7 +32,7 @@ router.post('/login', notVerifyToken, (req, res, next) => {
             error.message = "이메일 또는 패스워드를 잘못 입력했습니다.";
             return next(error);
         }
-        return req.login(user, { session: false }, (loginError) => {
+        return req.login(user, { session: false }, async (loginError) => {
             if(loginError){
                 const error = new Error();
                 error.status = 500;
@@ -38,9 +40,16 @@ router.post('/login', notVerifyToken, (req, res, next) => {
                 console.log(loginError);
                 return next(error);
             }
-            const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
+
+            const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+            const refreshToken = jwt.sign({},process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
+
+            await User.update({
+                refreshToken
+            }, {where: {nickname : user.nickname}});
+
             res.status(200);
-            return res.json({user, token});
+            return res.json({user, acessToken, refreshToken});
         });
     })(req, res, next);
 });
@@ -49,7 +58,7 @@ router.post('/login', notVerifyToken, (req, res, next) => {
 router.get('/kakao', notVerifyToken, passport.authenticate('kakao', { session: false }));
 
 router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
-    passport.authenticate('kakao', { session: false }, (authError, user) => {
+    passport.authenticate('kakao', { session: false }, async (authError, user) => {
         if(authError){
             const error = new Error();
             error.status = 500;
@@ -64,10 +73,15 @@ router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
             return next(error);
         }
 
-        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
+        const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
+
+        await User.update({
+            refreshToken
+        }, {where: {nickname : user.nickname}});
+
         res.status(200);
-        console.log({user, token});
-        return res.json({user, token});
+        return res.json({user, acessToken, refreshToken});
     })(req, res, next);
 });
 
@@ -75,7 +89,7 @@ router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
 router.get('/google', notVerifyToken, passport.authenticate('google', { scope: ['profile' , 'email'], session : false }));
 
 router.get('/google/callback', notVerifyToken, (req, res, next) => {
-    passport.authenticate('google', {session : false}, (authError, user) => {
+    passport.authenticate('google', {session : false}, async (authError, user) => {
         if(authError){
             const error = new Error();
             error.status = 500;
@@ -90,18 +104,27 @@ router.get('/google/callback', notVerifyToken, (req, res, next) => {
             return next(error);
         }
 
-        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: '10m', issuer : 'lyrical'});
+        const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+        const refreshToken = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
+
+        await User.update({
+            refreshToken
+        }, {where: {nickname : user.nickname}});
+
         res.status(200);
-        console.log({user, token});
-        return res.json({user, token});
+        return res.json({user, acessToken, refreshToken});
     })(req, res, next);
 });
 
 
 /** 로그 아웃 **/
-router.get('/logout', verifyToken, (req, res, next) => {
+router.get('/logout', verifyToken, async (req, res, next) => {
     req.logout();
-    req.session.destroy();
+
+    await User.update({
+        refreshToken : None
+    }, {where: {nickname : req.user.nickname}});
+
     res.status(204);
     return res.json();
 });

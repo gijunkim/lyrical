@@ -46,6 +46,9 @@ module.exports = class User extends Sequelize.Model{
                 type: Sequelize.STRING(30),
                 allowNull: true,
             },
+            refreshToken: {
+                type: Sequelize.TEXT,
+            },
         }, {
             sequelize,
             timestamps: true,

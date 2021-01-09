@@ -4,7 +4,7 @@ const User = require('../models/user');
 exports.verifyToken = async (req, res, next) => {
     try{
         req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
-        req.user = await User.findOne({ where: {id : req.decoded.id}});
+        req.user = await User.findOne({ where: {nickname : req.decoded}});
         return next();
     } catch(err){
         if(err.name === 'TokenExpiredError'){ // 유효 기간 초과

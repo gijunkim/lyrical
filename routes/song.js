@@ -130,8 +130,8 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
             return next(error);
         }
 
-        console.log(await Artist.findOne({ where : { url : artistURL }}));
-        const exSong = await Artist.findOne({ where : { url : artistURL }}).getSong({ 
+        const exArtist = await Artist.findOne({ where : { url : artistURL }});
+        const exSong = await exArtist.getSong({ 
             where: { url: songURL },
             include: [
                 {
@@ -171,7 +171,7 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
 router.post('/:artistURL/:songURL/annotation', verifyToken, isEmailVerified ,async (req, res, next) => {
     try{
         const { artistURL, songURL } = req.params;
-        const { before, offset, length, lyrics, annotation, after} = req.body;
+        const { before, offset, length, lyrics, annotation, after } = req.body;
 
         // url이 형식과 맞는지 확인
         if(artistURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
@@ -181,21 +181,24 @@ router.post('/:artistURL/:songURL/annotation', verifyToken, isEmailVerified ,asy
             return next(error);
         }
 
-        const exSong = await Artist.findOne({ where : { url : artistURL }}).getSong({ 
+        const exArtist = await Artist.findOne({ where : { url : artistURL }});
+        const exSong = await exArtist.getSong({ 
             where: { url: songURL }
         });
 
         // TODO : 중복체크 및 제대로 들어왔는지 확인
+        // after, before length 제한
         const newAnnotation = await Annotation.create({
-            before,
+            before : before.substr(0,10),
             offset,
             length,
             lyrics,
             annotation,
-            after
+            after : after.substr(0,10)
         });
 
-        await exSong.setAnnotation(newAnnotation);
+        await exSong.setAnnotations(newAnnotation);
+        await newAnnotation.setUser(req.user.id);
 
         console.log(exSong);
         console.log(newAnnotation);

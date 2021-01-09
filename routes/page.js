@@ -19,7 +19,7 @@ router.get('/join', (req, res, next) => {
 router.get('/token', verifyToken, (req, res, next) => {
     res.status(200);
     console.log(req.headers);
-    return res.json({ headers: req.headers });
+    return res.json({ headers: req.headers, user: req.user });
 });
 
 module.exports = router;
