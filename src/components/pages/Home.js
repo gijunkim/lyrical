@@ -11,7 +11,7 @@ function Home() {
         <NavBar/>
         <Logo/>
         <SearchBar/>
-        <Chart/>
+        <Chart />
         <About/>
     </div>
   );

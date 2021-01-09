@@ -6,6 +6,8 @@ import AuthService from "../../services/auth.service";
 
 import "../css/NavBar.css";
 import { Link } from "react-router-dom";
+import { HashLink } from 'react-router-hash-link';
+
 
 class NavBar extends Component {
   constructor(props) {
@@ -40,9 +42,9 @@ class NavBar extends Component {
           {MenuItems.map((item, index) => {
             return (
               <li key={index}>
-                <a className={item.cName} href={item.url}>
+                <HashLink to={item.url} className={item.cName}>
                   {item.title}
-                </a>
+                </HashLink>
               </li>
             );
           })}
