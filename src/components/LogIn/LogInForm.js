@@ -56,7 +56,7 @@ class LogInForm extends Component {
         AuthService.login(this.state.email, this.state.password)
             .then((response) => {
                 console.log(response);
-                if (response.token) {
+                if (response.accessToken) {
                     this.props.history.push("/profile");
                 }
             });

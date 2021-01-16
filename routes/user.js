@@ -97,10 +97,10 @@ router.post('/refreshToken', async (req, res, next) => {
         const exUser = await User.findOne({ where: { refreshToken }});
 
         if(exUser){
-            const acessToken = jwt.sign({nickname : exUser.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+            const accessToken = jwt.sign({nickname : exUser.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
 
             res.status(200);
-            return res.json({ acessToken });
+            return res.json({ accessToken });
         } else{
             const error = new Error();
             error.status = 400;

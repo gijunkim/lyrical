@@ -41,7 +41,7 @@ router.post('/login', notVerifyToken, (req, res, next) => {
                 return next(error);
             }
 
-            const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+            const accessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
             const refreshToken = jwt.sign({},process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
 
             await User.update({
@@ -49,7 +49,7 @@ router.post('/login', notVerifyToken, (req, res, next) => {
             }, {where: {nickname : user.nickname}});
 
             res.status(200);
-            return res.json({user, acessToken, refreshToken});
+            return res.json({user, accessToken, refreshToken});
         });
     })(req, res, next);
 });
@@ -73,7 +73,7 @@ router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
             return next(error);
         }
 
-        const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+        const accessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
         const refreshToken = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
 
         await User.update({
@@ -81,7 +81,7 @@ router.get('/kakao/callback', notVerifyToken, (req, res, next) => {
         }, {where: {nickname : user.nickname}});
 
         res.status(200);
-        return res.json({user, acessToken, refreshToken});
+        return res.json({user, accessToken, refreshToken});
     })(req, res, next);
 });
 
@@ -104,7 +104,7 @@ router.get('/google/callback', notVerifyToken, (req, res, next) => {
             return next(error);
         }
 
-        const acessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+        const accessToken = jwt.sign({nickname : user.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
         const refreshToken = jwt.sign({}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE, issuer : 'lyrical'});
 
         await User.update({
@@ -112,7 +112,7 @@ router.get('/google/callback', notVerifyToken, (req, res, next) => {
         }, {where: {nickname : user.nickname}});
 
         res.status(200);
-        return res.json({user, acessToken, refreshToken});
+        return res.json({user, accessToken, refreshToken});
     })(req, res, next);
 });
 
