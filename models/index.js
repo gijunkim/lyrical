@@ -6,6 +6,7 @@ const User = require('./user');
 const Song = require('./song');
 const Artist = require('./artist');
 const Annotation = require('./annotation');
+const Album = require('./album');
 
 const db = {};
 const sequelize = new Sequelize(
@@ -22,15 +23,18 @@ db.User = User;
 db.Song = Song;
 db.Artist = Artist;
 db.Annotation = Annotation;
+db.Album = Album;
 
 db.User.init(sequelize);
 db.Song.init(sequelize);
 db.Artist.init(sequelize);
 db.Annotation.init(sequelize);
+db.Album.init(sequelize);
 
 db.User.associate(db);
 db.Song.associate(db);
 db.Artist.associate(db);
 db.Annotation.associate(db);
+db.Album.init(sequelize);
 
 module.exports = db;
