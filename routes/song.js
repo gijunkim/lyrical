@@ -164,7 +164,7 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
 
         if(exSong){
             res.status(200);
-            return res.json({ song: exSong});
+            return res.json({ song: exSong, artist: exArtist});
         } else {
             res.status(204);
             return res.json();

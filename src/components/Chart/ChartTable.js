@@ -79,7 +79,8 @@ function Table({ columns, data }) {
   const onRowClick = (state, rowInfo, column, instance) => {
     return {
         onClick: (e, handleOriginal) => {
-          history.push('/lyrics');
+          const { artist, title } = rowInfo.row.original;
+          history.push('/' + artist.toLowerCase() + '-' + title.toLowerCase() + '-lyrics');
         }
     }
 }

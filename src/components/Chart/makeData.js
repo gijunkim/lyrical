@@ -13,8 +13,10 @@ const range = len => {
 const newPerson = (rank) => {
   const statusChance = Math.random()
   return {
-    title: namor.generate({ words: 1, numbers: 0 }),
-    artist: namor.generate({ words: 1, numbers: 0 }),
+    // title: namor.generate({ words: 1, numbers: 0 }),
+    // artist: namor.generate({ words: 1, numbers: 0 }),
+    title: "METEOR",
+    artist: "CHANGMO",
     number: rank + 1,
     // visits: Math.floor(Math.random() * 100),
     // progress: Math.floor(Math.random() * 100),
