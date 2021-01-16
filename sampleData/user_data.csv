@@ -1,0 +1,2 @@
+id,nickname,name,email,emailVerification,emailVerifyKey,keyExpire,password,provider,snsID,refreshToken,createdAt,updatedAt
+1,gjk,Gijun,abc@abc.com,1,08547f686d636f8b4e28fc51a95d90e415c4049a3a2e17f73c0b65454b5d76d22cff200a038e4d86a584e6abf0d93742aaaa,1610770945752,$2b$12$exa2ybCQyXoFA..611f7wekuxaqyw5k7KJN/PVelhkBxRwpy0iooG,local,NULL,NULL,"2021-01-16 04:12:25","2021-01-16 04:12:42"
