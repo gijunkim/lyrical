@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../css/ProfileForm.css";
+import "../../styles/ProfileForm.css";
 
 class ProfileStat extends Component {
   render() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import InputField from "../LogIn/InputField"
 import SignUpButton from "./SignUpButton"
 import Axios from 'axios'
-import '../css/LogInForm.css';
+import '../../styles/LogInForm.css';
 import { withRouter } from "react-router-dom";
 
 import AuthService from '../../services/auth.service';

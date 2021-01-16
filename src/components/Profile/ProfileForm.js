@@ -3,7 +3,7 @@ import Axios from "axios";
 
 import ProfileStat from "./ProfileStat";
 import ProfileContribution from "./ProfileContribution";
-import "../css/ProfileForm.css";
+import "../../styles/ProfileForm.css";
 
 import AuthService from "../../services/auth.service";
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/Chart.css';
+import '../../styles/Chart.css';
 import ChartTable from './ChartTable';
 
 class Chart extends Component {
@@ -22,7 +22,7 @@ class Chart extends Component {
     render() {
         
         return(
-            <div className="chartContainer">
+            <div id='top-chart' className="chartContainer">
                 <div className="chartHeader"> 
                     <h1 className="chartTitle">TOP 10</h1>
                     <p className="chartTime">{this.state.date}</p>

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import NavBar from '../NavBar/NavBar';
-import About from '../AboutFooter/About';
-import ProfileForm from '../Profile/ProfileForm';
+import NavBar from '../components/NavBar/NavBar';
+import About from '../components/AboutFooter/About';
+import ProfileForm from '../components/Profile/ProfileForm';
 
 function Profile() {
   return (

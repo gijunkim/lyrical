@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../css/Lyrics.css";
+import "../../styles/Lyrics.css";
 
 class LyricsHeader extends Component {
   constructor(props) {
