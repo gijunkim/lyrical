@@ -1,130 +1,147 @@
 .FormContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 50px;
-    padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .FormHeader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    flex-direction: column;    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  flex-direction: column;
 }
 
-.FormTitle{
-    color: black;
+.FormTitle {
+  color: black;
 }
 
 .Form {
-    align-self: center;
-    padding: 30px;
-    width: 20%;
-    border-bottom: solid 2px black;
+  align-self: center;
+  padding: 30px;
+  width: 20%;
+  border-bottom: solid 2px black;
 }
 
 .FormOthers {
-    align-self: center;
-    padding: 30px;
-    width: 20%;
+  align-self: center;
+  padding: 30px;
+  width: 20%;
 }
 
 .InputHeaderContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .InputHeaderError {
-    font-size: 0.8rem;
-    color: red;
-    padding: 5px;
+  font-size: 0.8rem;
+  color: red;
+  padding: 5px;
 }
 
 .InputHeader {
-    font-size: 1rem;
-    padding: 5px;
+  font-size: 1rem;
+  padding: 5px;
 }
 
 .Input {
-    box-sizing: border-box;
-    outline: none;
-    border: solid 2px #777;
-    border-radius: 4px;
-    color: #292929;
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    background: rgba(255,255,255,1);
-    margin-bottom: 16px;
+  box-sizing: border-box;
+  outline: none;
+  border: solid 2px #777;
+  border-radius: 4px;
+  color: #292929;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 1);
+  margin-bottom: 16px;
 }
 
 .InputError {
-    box-sizing: border-box;
-    outline: none;
-    border: solid 2px rgb(255, 0, 0);
-    border-radius: 4px;
-    color: #292929;
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    background: rgba(255,255,255,1);
-    margin-bottom: 16px;
+  box-sizing: border-box;
+  outline: none;
+  border: solid 2px rgb(255, 0, 0);
+  border-radius: 4px;
+  color: #292929;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 1);
+  margin-bottom: 16px;
 }
 
 .loginButton {
-    padding-top: 16px;
+  padding-top: 16px;
 }
 
 .signButton {
-    padding-bottom: 12px;
-    padding-top: 12px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
+  padding-bottom: 12px;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
-   
+
 .btn {
-    width: 100%;
-    color:  white;
-    padding: 12px;
-    font-size: 14px;
-    font-weight: bold;
-    border: solid 2px #777;
-    border-radius: 4px;
-    background: black;
-    cursor: pointer;
+  width: 100%;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: solid 2px #777;
+  border-radius: 4px;
+  background: black;
+  cursor: pointer;
 }
 
 .btnG {
-    width: 100%;
-    color:  white;
-    padding: 12px;
-    font-size: 14px;
-    font-weight: bold;
-    border: solid 2px #777;
-    border-radius: 4px;
-    background: #e47365;
-    cursor: pointer;
+  width: 100%;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: solid 2px #777;
+  border-radius: 4px;
+  background: #e47365;
+  cursor: pointer;
 }
 
 .btnK {
-    width: 100%;
-    color:  black;
-    padding: 12px;
-    font-size: 14px;
-    font-weight: bold;
-    border: solid 2px #777;
-    border-radius: 4px;
-    background: #ffe500;
-    cursor: pointer;
+  width: 100%;
+  color: black;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: solid 2px #777;
+  border-radius: 4px;
+  background: #ffe500;
+  cursor: pointer;
 }
 
 .fa-google {
-    margin: 0px 7px 0px;
-    color: white;
+  margin: 0px 7px 0px;
+  color: white;
+}
+
+.fa-eye {
+  position: absolute;
+  top: 23%;
+  right: 5%;
+}
+
+.fa-eye:hover {
+  position: absolute;
+  top: 23%;
+  right: 5%;
+  cursor: pointer;
+}
+
+.inputField {
+  display: flex;
+  position: relative;
 }

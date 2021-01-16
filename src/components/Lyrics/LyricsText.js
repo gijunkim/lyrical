@@ -12,7 +12,6 @@ class LyricsHeader extends Component {
       lyrics = [];
     if (typeof this.props.lyrics == "string") {
       lyricsLine = this.props.lyrics.split("\n");
-      console.log(lyricsLine);
       for (let i = 0; i < lyricsLine.length; i++) {
         if (lyricsLine[i] == "") {
           lyrics.push(<br />);
@@ -24,7 +23,6 @@ class LyricsHeader extends Component {
           );
         }
       }
-      console.log(lyrics, "lyrics");
     }
     return lyrics;
   }

@@ -17,7 +17,6 @@ function Lyrics() {
     fetch(`http://localhost:8081/song/${artist}/${title}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setArtistName(data.artist.name);
         setSongName(data.song.title);
         setReleaseDate(data.song.release);
