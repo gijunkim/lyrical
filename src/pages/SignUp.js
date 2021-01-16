@@ -1,7 +1,7 @@
 import React from 'react';
-import NavBar from '../NavBar/NavBar';
-import About from '../AboutFooter/About';
-import SignUpForm from '../SignUp/SignUpForm';
+import NavBar from '../components/NavBar/NavBar';
+import About from '../components/AboutFooter/About';
+import SignUpForm from '../components/SignUp/SignUpForm';
 
 function SignUp() {
   return (

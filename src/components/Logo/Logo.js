@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/Logo.css';
+import '../../styles/Logo.css';
 import WallPaper from '../../assets/home_wallpaper.jpg'
 
 class Logo extends Component {

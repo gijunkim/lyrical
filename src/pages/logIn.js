@@ -1,9 +1,7 @@
 import React from 'react';
-import NavBar from '../NavBar/NavBar';
-import About from '../AboutFooter/About';
-import LogInForm from '../LogIn/LogInForm';
-
-import AuthService from '../../services/auth.service';
+import NavBar from '../components/NavBar/NavBar';
+import About from '../components/AboutFooter/About';
+import LogInForm from '../components/LogIn/LogInForm';
 
 function LogIn() {
   return (

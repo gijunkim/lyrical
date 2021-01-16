@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { MenuItems } from "./MenuItems";
 
-import LogIn from "../pages/LogIn";
 import AuthService from "../../services/auth.service";
 
-import "../css/NavBar.css";
+import "../../styles/NavBar.css";
 import { Link } from "react-router-dom";
 import { HashLink } from 'react-router-hash-link';
 

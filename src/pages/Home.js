@@ -1,9 +1,9 @@
 import React from 'react';
-import NavBar from '../NavBar/NavBar'
-import Logo from '../Logo/Logo'
-import SearchBar from '../SearchBar/SearchBar';
-import Chart from '../Chart/Chart'
-import About from '../AboutFooter/About';
+import NavBar from '../components/NavBar/NavBar'
+import Logo from '../components/Logo/Logo'
+import SearchBar from '../components/SearchBar/SearchBar';
+import Chart from '../components/Chart/Chart'
+import About from '../components/AboutFooter/About';
 
 function Home() {
   return (

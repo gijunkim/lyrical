@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Home from "./components/pages/Home";
-import LogIn from "./components/pages/LogIn";
-import SignUp from "./components/pages/SignUp";
-import Profile from "./components/pages/Profile";
-import Lyrics from "./components/pages/Lyrics";
+import Home from "./pages/Home";
+import LogIn from "./pages/LogIn";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import Lyrics from "./pages/Lyrics";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Fragment } from "react";

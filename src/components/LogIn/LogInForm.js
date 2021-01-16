@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 
 import AuthService from "../../services/auth.service";
 
-import '../css/LogInForm.css';
+import '../../styles/LogInForm.css';
 
 
 class LogInForm extends Component {
