@@ -10,8 +10,21 @@ const router = express.Router();
 const addRelationship = async function(artistsList, song, type){
     const artists = artistsList.split(',');
     const result = await Promise.all(
-        artists.map(artist => {
-            return Artist.findOne({ where: { name: artist }});
+        artists.map(async (artist) => {
+            let exArtist = await Artist.findOne({ where : { name : artist }});
+
+            if(!exArtist){
+                const artistURL = artist.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+
+                exArtist = await Artist.create({
+                    name : artist,
+                    url : artistURL,
+                    img : 'default img',
+                    aboutArtist: `put some information about ${artist}`
+                });
+            }
+
+            return exArtist;
         }),
     );
 
