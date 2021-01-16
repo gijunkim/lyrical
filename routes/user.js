@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { verifyToken, isEmailVerified, notVerifyToken } = require('./middlewares');
 
@@ -84,6 +85,34 @@ router.post('/exist', notVerifyToken, async (req, res, next) => {
         const error = new Error();
         error.status = 400;
         error.message = '중복체크를 위한 nickname 또는 email이 들어오지 않았습니다.';
+        return next(error);
+    }
+});
+
+// POST /user/refreshToken
+router.post('/refreshToken', async (req, res, next) => {
+    const { refreshToken } = req.body;
+
+    try{
+        const exUser = await User.findOne({ where: { refreshToken }});
+
+        if(exUser){
+            const acessToken = jwt.sign({nickname : exUser.nickname}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE, issuer : 'lyrical'});
+
+            res.status(200);
+            return res.json({ acessToken });
+        } else{
+            const error = new Error();
+            error.status = 400;
+            error.message = '해당 refreshToken이 존재하지 않습니다. 다시 로그인 해주세요.';
+            return next(error);
+        }
+
+    } catch(err){
+        const error = new Error();
+        error.status = 500;
+        error.message = 'GET /user/refreshToken 에서 에러가 발생하였습니다.';
+        console.error(err);
         return next(error);
     }
 });
