@@ -14,7 +14,7 @@ const addRelationship = async function(artistsList, song, type){
             let exArtist = await Artist.findOne({ where : { name : artist }});
 
             if(!exArtist){
-                const artistURL = artist.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+                const artistURL = artist.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
                 exArtist = await Artist.create({
                     name : artist,
@@ -58,9 +58,9 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
     // TODO : 여기서도 중복체크
     // artist 없으면 먼저 만들었다고 가정 front 단에서 promise 활용
     try {
-        const artistURL = artist.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
-        const songURL = title.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
-        const albumURL = album.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+        const artistURL = artist.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        const songURL = title.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        const albumURL = album.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         let exArtist = await Artist.findOne({ where : { url : artistURL }});
 
@@ -150,15 +150,10 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
 // GET /song/:artistURL/:songURL
 router.get('/:artistURL/:songURL', async (req, res, next) => {
     try{
-        const { artistURL, songURL } = req.params;
+        let { artistURL, songURL } = req.params;
 
-        // url이 형식과 맞는지 확인
-        if(artistURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
-            const error = new Error();
-            error.status = 400;
-            error.message = "artist URL 또는 song URL이 형식에 맞지 않습니다.";
-            return next(error);
-        }
+        artistURL = artistURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        songURL = songURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         const exArtist = await Artist.findOne({ where : { url : artistURL }});
         const exSong = await exArtist.getSong({ 
@@ -200,16 +195,11 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
 // POST /song/:artistURL/:songURL/annotation
 router.post('/:artistURL/:songURL/annotation', verifyToken, isEmailVerified ,async (req, res, next) => {
     try{
-        const { artistURL, songURL } = req.params;
+        let { artistURL, songURL } = req.params;
         const { before, offset, length, lyrics, annotation, after } = req.body;
 
-        // url이 형식과 맞는지 확인
-        if(artistURL.match(/[^a-z0-9\-]/i) || songURL.match(/[^a-z0-9\-]/i)){
-            const error = new Error();
-            error.status = 400;
-            error.message = "artist URL 또는 song URL이 형식에 맞지 않습니다.";
-            return next(error);
-        }
+        artistURL = artistURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        songURL = songURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         const exArtist = await Artist.findOne({ where : { url : artistURL }});
         const exSong = await exArtist.getSong({ 

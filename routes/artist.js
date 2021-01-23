@@ -14,7 +14,7 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
     if(name){
         try{
             // name으로 url을 생성
-            const url = name.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+            const url = name.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
             const exArtist = await Artist.findOne({ where: { url } });
             
@@ -57,15 +57,9 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
 // GET /artist/:url
 router.get('/:url', async (req, res, next) => {
     try{
-        const { url } = req.params;
+        let { url } = req.params;
 
-        // url이 형식과 맞는지 확인
-        if(url.match(/[^a-z0-9\-]/i)){
-            const error = new Error();
-            error.status = 400;
-            error.message = "artist URL이 형식에 맞지 않습니다.";
-            return next(error);
-        }
+        url = url.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         const artist = await Artist.findAll({ where: { url },
             include: [{ 
