@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Song, Artist } = require('../models');
+const { Song, Artist, Album } = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 
@@ -33,18 +33,13 @@ const upload = multer({
 // GET /album/:artistURL/:albumURL
 router.get('/:artistURL/:albumURL', async (req, res, next) => {
     try{
-        const { artistURL, albumURL } = req.params;
+        let { artistURL, albumURL } = req.params;
 
-        // url이 형식과 맞는지 확인
-        if(artistURL.match(/[^a-z0-9\-]/i) || albumURL.match(/[^a-z0-9\-]/i)){
-            const error = new Error();
-            error.status = 400;
-            error.message = "artist URL 또는 album URL이 형식에 맞지 않습니다.";
-            return next(error);
-        }
+        artistURL = artistURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        albumURL = albumURL.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         const exArtist = await Artist.findOne({ where : { url : artistURL }});
-        const exAlbum = await exArtist.getAlbum({ 
+        let exAlbum = await exArtist.getAlbums({ 
             where: { url: albumURL },
             include: [
                 {
@@ -52,6 +47,8 @@ router.get('/:artistURL/:albumURL', async (req, res, next) => {
                 }
             ]
         });
+
+        exAlbum = exAlbum[0];
 
         if(exAlbum){
             res.status(200);
@@ -85,8 +82,8 @@ router.post('/', verifyToken, isEmailVerified, upload2.none(), async (req, res, 
     // TODO : 여기서도 중복체크
     // artist 없으면 먼저 만들었다고 가정 front 단에서 promise 활용
     try {
-        const artistURL = artist.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
-        const albumURL = title.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+        const artistURL = artist.replace(/[^a-z0-9]/gi,"").toLowerCase();
+        const albumURL = title.replace(/[^a-z0-9]/gi,"").toLowerCase();
 
         let exArtist = await Artist.findOne({ where : { url : artistURL }});
 
@@ -99,11 +96,13 @@ router.post('/', verifyToken, isEmailVerified, upload2.none(), async (req, res, 
             });
         } else {
             // 해당 artist에 해당 album 정보가 있는지 확인
-            const exAlbum = await exArtist.getAlbum({
+            let exAlbum = await exArtist.getAlbums({
                 where: {
                     url: albumURL
                 }
             });
+
+            exAlbum = exAlbum[0];
 
             if(exAlbum){
                 const error = new Error();
@@ -137,9 +136,16 @@ router.post('/', verifyToken, isEmailVerified, upload2.none(), async (req, res, 
 });
 
 // POST /album/img
-router.post('/img', verifyToken, isEmailVerified, upload.array('single'), async (req, res, next) => {
+router.post('/img', verifyToken, isEmailVerified, upload.single('cover'), async (req, res, next) => {
     console.log(req.file);
-    res.json({ url: `/img/${req.file.filename}`});
+    return res.json({ url: `/img/${req.file.filename}`});
+});
+
+// for test
+// POST /album/upload
+router.post('/upload', upload.array('cover'), async (req, res, next) => {
+    console.log(req.files, req.body);
+    return res.json({ url: `/img/${req.files.filename}`});
 });
 
 module.exports = router;

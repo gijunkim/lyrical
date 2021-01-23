@@ -22,4 +22,9 @@ router.get('/token', verifyToken, (req, res, next) => {
     return res.json({ headers: req.headers, user: req.user });
 });
 
+// GET /album_post_test
+router.get('/album_post_test', (req, res, next) => {
+    return res.render('album');
+});
+
 module.exports = router;
