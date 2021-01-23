@@ -103,22 +103,24 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
 
         // featuring 추가
         if(features){
-            addRelationship(features, song, 'features');
+            await addRelationship(features, song, 'features');
         }
 
         // producer 추가
         if(producers){
-            addRelationship(producers, song, 'producers');
+            await addRelationship(producers, song, 'producers');
         }
         
         // writer 추가
         if(writtens){
-            addRelationship(writtens, song, 'writtens');
+            await addRelationship(writtens, song, 'writtens');
         }
 
         // album 추가
         if(album){
-            let exAlbum = await exArtist.getAlbum({ where: { url : albumURL }});
+            let exAlbum = await exArtist.getAlbums({ where: { url : albumURL }});
+
+            exAlbum = exAlbum[0];
 
             if(!exAlbum){
                 exAlbum = await Album.create({
@@ -126,7 +128,7 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
                     url : albumURL,
                 });
 
-                await exAlbum.setArtist(exArtist);
+                await exAlbum.setArtist(exArtist.id);
             }
 
             await song.setAlbum(exAlbum);

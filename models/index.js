@@ -35,6 +35,6 @@ db.User.associate(db);
 db.Song.associate(db);
 db.Artist.associate(db);
 db.Annotation.associate(db);
-db.Album.init(sequelize);
+db.Album.associate(db);
 
 module.exports = db;
