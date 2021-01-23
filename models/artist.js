@@ -39,6 +39,8 @@ module.exports = class Artist extends Sequelize.Model{
     static associate(db){
         db.Artist.hasOne(db.Song);
 
+        db.Artist.hasMany(db.Album);
+
         db.Artist.belongsToMany(db.Song, { through: 'Feature', as: 'Featuring'});
         db.Artist.belongsToMany(db.Song, { through: 'Producer', as: 'Producing' });
         db.Artist.belongsToMany(db.Song, { through: 'Written', as: 'Writing'});

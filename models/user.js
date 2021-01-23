@@ -21,7 +21,7 @@ module.exports = class User extends Sequelize.Model{
             emailVerification: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
-                defaultValue: false,
+                defaultValue: true, // TODO 수정
             },
             //인증 코드
             emailVerifyKey: {

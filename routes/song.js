@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Song, Artist, Annotation } = require('../models');
+const { Song, Artist, Annotation, Album } = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 
@@ -46,7 +46,7 @@ const addRelationship = async function(artistsList, song, type){
 
 // POST /song
 router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
-    const { artist, title, songType, lyrics, features, producers, writtens, release, soundcloud, youtube } = req.body;
+    const { artist, title, songType, lyrics, features, producers, writtens, release, soundcloud, youtube, album } = req.body;
 
     if(!artist || !title || !songType || !lyrics){
         const error = new Error();
@@ -60,8 +60,9 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
     try {
         const artistURL = artist.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
         const songURL = title.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
+        const albumURL = album.replace(/ _/gi, "-").replace(/[^a-z0-9\-]/gi,"");
 
-        let exArtist = await Artist.findOne({ where : { url :artistURL }});
+        let exArtist = await Artist.findOne({ where : { url : artistURL }});
 
         if(!exArtist){
             exArtist = await Artist.create({
@@ -84,9 +85,7 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
                 error.message = `${artist} 의 ${title}이 존재합니다.`;
                 return next(error);
             }
-
         }
-
         const song = await Song.create({
             title,
             url : songURL,
@@ -104,19 +103,37 @@ router.post('/', verifyToken, isEmailVerified, async (req, res, next) => {
 
         // featuring 추가
         if(features){
-            addRelationship(features, song, 'features');
+            await addRelationship(features, song, 'features');
         }
 
         // producer 추가
         if(producers){
-            addRelationship(producers, song, 'producers');
+            await addRelationship(producers, song, 'producers');
         }
         
         // writer 추가
         if(writtens){
-            addRelationship(writtens, song, 'writtens');
+            await addRelationship(writtens, song, 'writtens');
         }
-        
+
+        // album 추가
+        if(album){
+            let exAlbum = await exArtist.getAlbums({ where: { url : albumURL }});
+
+            exAlbum = exAlbum[0];
+
+            if(!exAlbum){
+                exAlbum = await Album.create({
+                    title: album,
+                    url : albumURL,
+                });
+
+                await exAlbum.setArtist(exArtist.id);
+            }
+
+            await song.setAlbum(exAlbum);
+        }
+
         res.status(201);
         return res.json({ song });
 
@@ -164,7 +181,7 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
 
         if(exSong){
             res.status(200);
-            return res.json({ song: exSong});
+            return res.json({ song: exSong, artist: exArtist});
         } else {
             res.status(204);
             return res.json();

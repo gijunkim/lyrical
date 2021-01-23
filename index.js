@@ -14,6 +14,7 @@ const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const songRouter = require('./routes/song');
 const artistRouter = require('./routes/artist');
+const albumRouter = require('./routes/album');
 const profileRouter = require('./routes/profile');
 
 const { sequelize } = require('./models');
@@ -56,11 +57,13 @@ app.use(session({
 app.use(passport.initialize());
 
 app.use(cors());
+app.use('/img', express.static(path.join(__dirname,'uploads')));
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/song', songRouter);
 app.use('/artist', artistRouter);
+app.use('/album', albumRouter);
 app.use('/profile', profileRouter);
 app.use('/', pageRouter);
 
