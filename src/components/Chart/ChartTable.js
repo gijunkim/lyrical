@@ -1,8 +1,8 @@
-import React from 'react'
-import { useTable } from 'react-table'
-import { withRouter } from 'react-router'
-import styled from 'styled-components'
-import makeData from './makeData'
+import React from "react";
+import { useTable } from "react-table";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import makeData from "./makeData";
 import { useHistory } from "react-router-dom";
 
 const Styles = styled.div`
@@ -15,43 +15,42 @@ const Styles = styled.div`
 
     margin: 0 auto;
     tr {
+      :last-child {
+        padding-bottom: 0.5rem;
+      }
+      transition: all 0.2s ease-in-out;
+      border-bottom: 1px;
+      td {
+        :first-child {
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+        }
         :last-child {
-            padding-bottom: 0.5rem;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
         }
-        transition: all .2s ease-in-out;
-        border-bottom: 1px;
-        td {
-            :first-child {
-                border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
-            }
-            :last-child {
-                border-top-right-radius: 10px;
-                border-bottom-right-radius: 10px
-            }
-            cursor: pointer;
-        }
+        cursor: pointer;
+      }
     }
 
     tr:hover {
-        transform: scale(1.1);
-        background-color: #DDDDDD;
-        
+      transform: scale(1.1);
+      background-color: #dddddd;
     }
 
     td {
       border-spacing: 100px 0;
       margin: 0;
       padding: 1rem;
-      
+
       font-size: 20px;
       :first-child {
-          width: 5em;
+        width: 5em;
       }
       :nth-child(2) {
-          width: 20em;
-          font-weight: bold;
-          align-text: center;
+        width: 20em;
+        font-weight: bold;
+        align-text: center;
       }
       :last-child {
         width: 15em;
@@ -59,7 +58,7 @@ const Styles = styled.div`
       }
     }
   }
-`
+`;
 
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
@@ -72,98 +71,102 @@ function Table({ columns, data }) {
   } = useTable({
     columns,
     data,
-  })
+  });
 
   const history = useHistory();
 
   const onRowClick = (state, rowInfo, column, instance) => {
     return {
-        onClick: (e, handleOriginal) => {
-          history.push('/lyrics');
-        }
-    }
-}
+      onClick: (e, handleOriginal) => {
+        const { artist, title } = rowInfo.row.original;
+        history.push(
+          "/" + artist.toLowerCase() + "-" + title.toLowerCase() + "-lyrics"
+        );
+      },
+    };
+  };
 
   // Render the UI for your table
   return (
     <table {...getTableProps()}>
       <thead>
-        {headerGroups.map(headerGroup => (
+        {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            {headerGroup.headers.map((column) => (
+              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
             ))}
           </tr>
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
-          prepareRow(row)
+          prepareRow(row);
           return (
             <tr key={i} {...row.getRowProps(onRowClick)}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              {row.cells.map((cell) => {
+                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}
             </tr>
-          )
+          );
         })}
       </tbody>
     </table>
-  )
+  );
 }
 
 function ChartTable() {
   const columns = React.useMemo(
     () => [
       {
-        Header: ' ',
+        Header: " ",
         columns: [
           {
-            Header: '',
-            accessor: 'number',
+            Header: "",
+            accessor: "number",
           },
           {
-            Header: '',
-            accessor: 'title',
+            Header: "",
+            accessor: "title",
           },
           {
-            Header: '',
-            accessor: 'artist',
+            Header: "",
+            accessor: "artist",
           },
         ],
       },
-    //   {
-    //     Header: 'Info',
-    //     columns: [
-    //       {
-    //         Header: 'Age',
-    //         accessor: 'age',
-    //       },
-    //       {
-    //         Header: 'Visits',
-    //         accessor: 'visits',
-    //       },
-    //       {
-    //         Header: 'Status',
-    //         accessor: 'status',
-    //       },
-    //       {
-    //         Header: 'Profile Progress',
-    //         accessor: 'progress',
-    //       },
-    //     ],
-    //   },
+      //   {
+      //     Header: 'Info',
+      //     columns: [
+      //       {
+      //         Header: 'Age',
+      //         accessor: 'age',
+      //       },
+      //       {
+      //         Header: 'Visits',
+      //         accessor: 'visits',
+      //       },
+      //       {
+      //         Header: 'Status',
+      //         accessor: 'status',
+      //       },
+      //       {
+      //         Header: 'Profile Progress',
+      //         accessor: 'progress',
+      //       },
+      //     ],
+      //   },
     ],
     []
-  )
+  );
 
-  const data = React.useMemo(() => makeData(10), [])
+  //Length of Table
+  const data = React.useMemo(() => makeData(3), []);
 
   return (
-      <Styles>
-        <Table columns={columns} data={data} />
-      </Styles>
-  )
+    <Styles>
+      <Table columns={columns} data={data} />
+    </Styles>
+  );
 }
 
-export default withRouter(ChartTable)
+export default withRouter(ChartTable);
