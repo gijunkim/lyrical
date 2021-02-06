@@ -1,5 +1,5 @@
 const express = require('express');
-const { Song, Artist} = require('../models');
+const { Song, Artist, Album} = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 
@@ -64,16 +64,12 @@ router.get('/:url', async (req, res, next) => {
         const artist = await Artist.findAll({ where: { url },
             include: [{ 
                 model: Song,
+                attributes: ["title", "url", "view"],
             }, {
-                model: Song,
-                as: 'Featuring',
-            }, {
-                model: Song,
-                as: 'Producing',
-            }, {
-                model: Song,
-                as: 'Writing',
+                model: Album,
+                attributes: ["title", "url", "cover"],
             }],
+            attributes: ["name", "url", "img", "verified", "aboutArtist"],
         });
         
         if(artist){

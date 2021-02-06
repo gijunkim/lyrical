@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Song, Artist, Album, Comment } = require('../models');
+const { Song, Artist, Album, Comment, User } = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 
@@ -43,12 +43,23 @@ router.get('/:artistURL/:albumURL', async (req, res, next) => {
             where: { url: albumURL },
             include: [
                 {
+                    model: Artist,
+                    attributes: ["id", "name", "url"],
+                },
+                {
                     model: Song,
+                    attributes: ["id", "title", "url", "view"],  
                 },
                 {
                     model: Comment,
-                }
-            ]
+                    attributes: ["content", "up","down"],
+                    include: [{
+                        model: User,
+                        attributes: ["nickname"],
+                    }],
+                },
+            ],
+            attributes: ["title", "cover", "release"],
         });
 
         exAlbum = exAlbum[0];

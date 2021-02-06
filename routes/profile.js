@@ -1,5 +1,5 @@
 const express = require('express');
-const { Song, User } = require('../models');
+const { Song, User, Annotation, Comment, Artist } = require('../models');
 
 const { verifyToken, isEmailVerified} = require('./middlewares');
 
@@ -10,11 +10,33 @@ router.get('/:nickname', async (req, res, next) => {
     try{
         const { nickname } = req.params;
 
-        const user = await User.findOne({where: { nickname },
+        const user = await User.findOne({ where: { nickname },
             include: [{ 
-                model: Song, 
+                model: Song,
+                attributes: ["title", "url", "view"],
+                include: [{
+                    model: Artist,
+                    attributes: ["name", "url"],
+                }]
+            }, {
+                model: Annotation,
+                attributes: ['id', 'annotation'],
+                include: [
+                    {
+                        model: Song,
+                        attributes: ["title", "url", "view"],
+                        include: [{
+                            model: Artist,
+                            attributes: ["name", "url"],
+                        }]
+                    },
+                    {
+                        model: Comment,
+                        attributes: ["id", "content", "SongId", "AnnotationId", "AlbumId"]
+                    }
+                ]
             }],
-            attributes: ['id', 'nickname', 'name', 'email', 'provider']
+            attributes: ['nickname', 'name', 'emailVerification']
         });
 
         if(user){
