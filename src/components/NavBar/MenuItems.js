@@ -14,4 +14,9 @@ export const MenuItems = [
         url: '/#',
         cName: 'nav-links'
     },
+    {
+        title: '가사 추가',
+        url: '/new',
+        cName: 'nav-links'
+    },
 ]

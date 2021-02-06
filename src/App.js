@@ -4,6 +4,7 @@ import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Lyrics from "./pages/Lyrics";
+import AddLyrics from "./pages/AddLyrics";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Fragment } from "react";
@@ -31,7 +32,7 @@ class App extends React.Component {
             <Route path="/login" component={LogIn} />
             <Route path="/signup" component={SignUp} />
             <Route path="/:artist-:title-lyrics" component={Lyrics} />
-
+            <Route path="/new" component={AddLyrics} />
             <Route path="/profile" component={Profile} />
           </Switch>
         </Router>
