@@ -1,5 +1,5 @@
 const express = require('express');
-const { Song, Artist } = require('../models');
+const { Song, Artist} = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 

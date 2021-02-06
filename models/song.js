@@ -63,5 +63,6 @@ module.exports = class Song extends Sequelize.Model{
         db.Song.belongsToMany(db.Artist, { through: 'Written', as: 'Writers'});
 
         db.Song.hasMany(db.Annotation);
+        db.Song.hasMany(db.Comment);
     }
 }
