@@ -16,6 +16,7 @@ const songRouter = require('./routes/song');
 const artistRouter = require('./routes/artist');
 const albumRouter = require('./routes/album');
 const profileRouter = require('./routes/profile');
+const commentRouter = require('./routes/comment');
 
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
@@ -65,6 +66,7 @@ app.use('/song', songRouter);
 app.use('/artist', artistRouter);
 app.use('/album', albumRouter);
 app.use('/profile', profileRouter);
+app.use('/comment', commentRouter);
 app.use('/', pageRouter);
 
 app.use((req, res, next) => {

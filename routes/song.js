@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Song, Artist, Annotation, Album } = require('../models');
+const { Song, Artist, Annotation, Album, Comment } = require('../models');
 
 const { verifyToken, isEmailVerified } = require('./middlewares');
 
@@ -170,6 +170,13 @@ router.get('/:artistURL/:songURL', async (req, res, next) => {
                     as: 'Writers',
                 }, {
                     model: Annotation,
+                    include: [
+                        {
+                            model: Comment,
+                        },
+                    ]
+                }, {
+                    model: Comment,
                 }
             ]
         });
@@ -217,11 +224,8 @@ router.post('/:artistURL/:songURL/annotation', verifyToken, isEmailVerified ,asy
             after : after.substr(0,10)
         });
 
-        await exSong.setAnnotations(newAnnotation);
+        await exSong.addAnnotations(newAnnotation);
         await newAnnotation.setUser(req.user.id);
-
-        console.log(exSong);
-        console.log(newAnnotation);
 
         if(exSong){
             res.status(200);

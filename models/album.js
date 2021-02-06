@@ -15,12 +15,6 @@ module.exports = class Album extends Sequelize.Model{
             cover: {
                 type: Sequelize.STRING,
                 allowNull: true,
-                get(){
-                    return JSON.parse(this.getDataValue('cover'));
-                },
-                set(val){
-                    return this.setDataValue('cover', JSON.stringify(val));
-                },
             },
             release: {
                 type: Sequelize.DATEONLY,
@@ -42,5 +36,7 @@ module.exports = class Album extends Sequelize.Model{
         db.Album.hasMany(db.Song);
 
         db.Album.belongsTo(db.Artist);
+
+        db.Album.hasMany(db.Comment);
     }
 }

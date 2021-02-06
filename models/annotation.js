@@ -41,5 +41,7 @@ module.exports = class Annotation extends Sequelize.Model{
         //db.Annotation.belongsTo(db.Lyrics);
         db.Annotation.belongsTo(db.User);
         db.Annotation.belongsTo(db.Song);
+
+        db.Annotation.hasMany(db.Comment);
     }
 }
